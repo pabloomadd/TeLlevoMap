@@ -1,0 +1,22 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title class="ion-text-center">Inicio</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding ion-text-center">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Inicio</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <h1>Bienvenid@, {{this.user.name}}!</h1><br><br>
+  <ion-button (click)="sendPage()" color="success">Ir a viajes</ion-button>
+  <ion-button (click)="cerrarSesion()" color="warning">Cerrar sesión</ion-button>
+</ion-content>
+
+  
+
+
+

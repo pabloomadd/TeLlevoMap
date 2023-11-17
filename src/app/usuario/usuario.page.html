@@ -1,0 +1,64 @@
+<ion-header [translucent]="true">
+    <ion-toolbar>
+      <ion-title class="ion-text-center">
+        TeLlevoApp
+      </ion-title>
+    </ion-toolbar>
+</ion-header>
+<ion-content [fullscreen]="true">
+  <h2 class="ion-text-center">Viajes Activos</h2><br>
+  <!-- Viste de Viajes Activos -->
+  <ion-grid class="ion-text-center">
+  <ion-row class="titulos">
+      <ion-col>Nombre</ion-col>
+      <ion-col>Asientos</ion-col>
+      <ion-col>Inicio</ion-col>
+      <ion-col>Destino</ion-col>
+  </ion-row>
+  
+  <ion-row *ngFor="let viaje of viajes" class="ViajeView">
+      <ion-col>{{ viaje.nombre }}</ion-col>
+      <ion-col>{{ viaje.cantAsientosDisp }}</ion-col>
+      <ion-col>{{ viaje.lugarInicio }}</ion-col>
+      <ion-col>{{ viaje.lugarDestino }}</ion-col>
+  </ion-row>
+  </ion-grid>
+  <ion-button (click)="irHome()" class="ion-padding">Atrás</ion-button>
+</ion-content>
+
+<div class="ion-text-center">
+  <ion-button id="open-modal" class="ion-padding" shape="round" color="tertiary">
+    Reservar
+  </ion-button>
+  <!-- Modal Reservar -->
+  <ion-modal trigger="open-modal">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-button (click)="cancel()">
+              Cancelar
+            </ion-button>
+          </ion-buttons>
+          <ion-title class="ion-text-center">Reservar Viaje</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="addAlumno(viaje)">
+              Reservar
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">     
+        <ion-list>
+          <ion-item>  
+            <ion-select label="Viaje a reservar" [(ngModel)] = "viaje">
+                <ion-select-option [value]="viaje" *ngFor="let viaje of this.viajes">{{ viaje.nombre }}</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-list>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+</div>
+
