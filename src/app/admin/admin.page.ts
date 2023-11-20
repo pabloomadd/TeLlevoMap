@@ -32,7 +32,7 @@ export class AdminPage implements OnInit {
   @ViewChild ('map')
   mapRef!: ElementRef<HTMLElement>;
   newMap!: GoogleMap;
-  mapsKey!: 'AIzaSyCMbUo8L0fGP3VgwwuQe3UqYcxrrLLVEQs';
+  
 
   @ViewChild (IonModal) modal!: IonModal;
 

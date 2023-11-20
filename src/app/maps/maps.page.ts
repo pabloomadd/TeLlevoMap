@@ -15,15 +15,16 @@ import { environment } from 'src/environments/environment';
   schemas: [CUSTOM_ELEMENTS_SCHEMA]  
 })
 export class MapsPage{
-  @ViewChild('map')
-  mapRef!: ElementRef<HTMLElement>;
+  @ViewChild('mapRef')
+  mapRef !: ElementRef<HTMLElement>;
   newMap!: GoogleMap;
+
 
   async createMap() {
     this.newMap = await GoogleMap.create({
       id: 'my-map',
       element: this.mapRef.nativeElement,
-      apiKey: 'AIzaSyCMbUo8L0fGP3VgwwuQe3UqYcxrrLLVEQs',
+      apiKey: environment.mapsKeys,
       config: {
         center: {
           lat: -33.03364357117532,

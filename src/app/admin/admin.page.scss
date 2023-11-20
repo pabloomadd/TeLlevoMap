@@ -1,12 +1,10 @@
 capacitor-google-map{
   display: inline-block;
-  width: 100%;
+  width: 70%;
   height: 300px;
+  --background: transparent;
 }
 
-ion-content{
-  --background: transparent
-}
 
 ion-card {
     color: rgb(255, 255, 255);

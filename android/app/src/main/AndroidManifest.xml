@@ -24,6 +24,8 @@
 
         </activity>
 
+        <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyCMbUo8L0fGP3VgwwuQe3UqYcxrrLLVEQs"/>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"
@@ -40,7 +42,6 @@
     <!-- Permissions -->
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    
 
 </manifest>
