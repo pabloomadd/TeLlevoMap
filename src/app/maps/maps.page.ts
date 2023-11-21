@@ -16,7 +16,7 @@ import { environment } from 'src/environments/environment';
 })
 export class MapsPage{
   @ViewChild('mapRef')
-  mapRef !: ElementRef<HTMLElement>;
+  mapRef!: ElementRef<HTMLElement>;
   newMap!: GoogleMap;
 
 

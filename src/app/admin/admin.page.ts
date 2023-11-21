@@ -143,19 +143,45 @@ export class AdminPage implements OnInit {
     this.newMap = await GoogleMap.create({
       id: 'my-map',
       element: this.mapRef.nativeElement,
-      apiKey: 'AIzaSyCMbUo8L0fGP3VgwwuQe3UqYcxrrLLVEQs',
+      apiKey: environment.mapsKeys,
       config: {
         center: {
-          lat: -33.03364357117532,
-          lng:  -71.5331795329938,
+          lat: -33.04005395849287,
+          lng: -71.49137532175799,
         },
-        zoom: 13,
+        zoom: 11,
       },
     });
+
+    this.addMarkInicio();
+    this.addMarkFin();
   }
 
   async mapDestroy(){
     await this.newMap.destroy();
+  }
+
+  async addMarkInicio(){
+    const markerId = await this.newMap.addMarker({
+      coordinate: {
+        lat: -33.0336435711753,
+        lng: -71.5331795329938,
+      },
+      title: 'DUOC Viña del Mar',
+      snippet: 'DUOC'
+    })
+
+  }
+
+  async addMarkFin(){
+    const markerId = await this.newMap.addMarker({
+      coordinate: {
+        lat: -33.0481265544542,
+        lng: -71.4408920089665,
+      },
+      title: 'Centro de Quilpue'
+    })
+
   }
 
       
