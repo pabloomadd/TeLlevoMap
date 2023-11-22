@@ -35,4 +35,8 @@ export class ViajeService {
     getAlumnoViaje(idViaje: any): Observable<any>{
         return this._httpclient.get<any>(this.URL_SUPABASE + 'Viaje_Alumnos?idViaje=eq.'+ idViaje + '&select=idAlumno', {headers: this.supabaseheaders, responseType: 'json'})
     }
+
+    getInicioViaje(idViaje: any): Observable<any>{
+        return this._httpclient.get<any>(this.URL_SUPABASE + 'Viaje'+ idViaje + '&select=*, lugarInicio (*, nombre, latitud, longitud)', {headers: this.supabaseheaders, responseType: 'json'})
+    }
 }
