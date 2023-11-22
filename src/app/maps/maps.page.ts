@@ -1,10 +1,18 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, ViewChild} from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
-import { GoogleMap } from "@capacitor/google-maps";
-import { environment } from 'src/environments/environment';
 
+
+declare var google: any;
+
+interface Marker {
+  position: {
+    lat: number,
+    lng: number,
+  };
+  title: string;
+}
 
 @Component({
   selector: 'app-maps',
@@ -12,49 +20,50 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./maps.page.scss'],
   standalone: true,
   imports: [IonicModule, CommonModule, FormsModule],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]  
+  
 })
-export class MapsPage{
-  @ViewChild('mapRef')
-  mapRef!: ElementRef<HTMLElement>;
-  newMap!: GoogleMap;
+export class MapsPage implements OnInit{
+  map = null;
 
+  ngOnInit() {
+    this.loadMap();
+  }
 
-  async createMap() {
-    this.newMap = await GoogleMap.create({
-      id: 'my-map',
-      element: this.mapRef.nativeElement,
-      apiKey: environment.mapsKeys,
-      config: {
-        center: {
-          lat: -33.03364357117532,
-          lng:  -71.5331795329938,
-        },
-        zoom: 13,
-      },
+  loadMap() {
+    // create LatLng object
+    const myLatLng = { lat: 4.658383846282959, lng: -74.09394073486328 };
+    
+    // create a new map by passing HTMLElement
+    const mapEle: HTMLElement | null = document.getElementById('map');
+
+    if (mapEle) {
+      // create map only if map element is found
+      this.map = new google.maps.Map(mapEle, {
+        center: myLatLng,
+        zoom: 12
+      });
+
+      google.maps.event.addListenerOnce(this.map, 'idle', () => {
+        mapEle.classList.add('show-map');
+        const marker = {
+          position: {
+            lat: 4.658383846282959,
+            lng: -74.09394073486328 
+          },
+          title: 'punto uno'
+        }
+        this.addMarker(marker);
+      });
+    } else {
+      console.error('Map element not found');
+    }
+  }
+
+  addMarker(marker: Marker) {
+    return new google.maps.Marker({
+      position: marker.position,
+      map: this.map,
+      title: marker.title
     });
-  }
-
-  async addMarkA(){
-    const markerId = await this.newMap.addMarker({
-      coordinate: {
-        lat: -33.0336435711753,
-        lng: -71.5331795329938,
-      },
-      title: 'DUOC Viña del Mar',
-      snippet: 'DUOC'
-    })
-
-  }
-
-  async addMarkB(){
-    const markerId = await this.newMap.addMarker({
-      coordinate: {
-        lat: -33.0481265544542,
-        lng: -71.4408920089665,
-      },
-      title: 'Centro de Quilpue'
-    })
-
   }
 } 
