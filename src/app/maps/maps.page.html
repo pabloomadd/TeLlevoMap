@@ -7,12 +7,13 @@
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Current Map</ion-title>
+      <ion-title size="large">Geolocation</ion-title>
     </ion-toolbar>
   </ion-header>
   
   
   <div id="map"></div>
+  <ion-button (click)="getCurrentLocation()">Geolocation</ion-button>
   
 
 </ion-content>

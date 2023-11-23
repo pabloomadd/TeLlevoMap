@@ -2,6 +2,7 @@ import { Component, OnInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
+import { Geolocation } from '@capacitor/geolocation';
 
 
 declare var google: any;
@@ -84,5 +85,31 @@ export class MapsPage implements OnInit{
       alert('Could not display directions due to: ' + status);
     }
   });
+  }
+
+  async getCurrentLocation(){
+    try {
+      const permissionStatus = await Geolocation.checkPermissions();
+      console.log('Permission Status: ', permissionStatus.location);
+      if (permissionStatus?.location != 'granted') {
+        const requestStatus = await Geolocation.requestPermissions();
+        if (requestStatus.location != 'granted') {
+          //Go to Location Settings
+          return;
+        }
+      }
+      let options: PositionOptions = {
+        maximumAge: 3000,
+        timeout: 10000,
+        enableHighAccuracy: false
+      };
+      const position = await Geolocation.getCurrentPosition(options);
+      console.log(position);
+
+    } catch (error) {
+      console.log(error);
+      throw(error);
+      
+    }
   }
 } 
