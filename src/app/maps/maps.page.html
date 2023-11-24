@@ -1,17 +1,36 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>Capacitor Map</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Rutas Map</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" class="ion-text-center">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Geolocation</ion-title>
+      
+      <ion-title size="large">Rutas</ion-title>
     </ion-toolbar>
   </ion-header>
   
+  <ion-list>
+    <ion-item>  
+      <ion-select label="Seleccione Viaje" [(ngModel)] = "viajeSeleccionado">
+          <ion-select-option [value]="viaje" *ngFor="let viaje of this.viajes">{{ viaje.nombre }}</ion-select-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
   
+  <br>
+  <ion-button (click)="verRuta()">
+    Gen Ruta
+  </ion-button>
+  <br>
+  <div>Inicio: </div>
+  <div>Destino: </div>
+  <br>
   <div id="map"></div>
   <ion-button (click)="getCurrentLocation()">Geolocation</ion-button>
   

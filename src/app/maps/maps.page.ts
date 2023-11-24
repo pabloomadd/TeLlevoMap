@@ -3,7 +3,10 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { Geolocation } from '@capacitor/geolocation';
-
+import { ViajeModel } from '../models/ViajeModel';
+import { ViajeService } from '../services/viajeService/viaje.service';
+import { lastValueFrom } from 'rxjs';
+import { HttpClientModule } from '@angular/common/http';
 
 declare var google: any;
 
@@ -20,7 +23,8 @@ interface Marker {
   templateUrl: './maps.page.html',
   styleUrls: ['./maps.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule],
+  imports: [IonicModule, CommonModule, FormsModule, HttpClientModule],
+  providers: [ViajeService],
   
 })
 export class MapsPage implements OnInit{
@@ -38,9 +42,37 @@ export class MapsPage implements OnInit{
     lng: -71.4408920089665,
    };
 
+  constructor(private _viajeService: ViajeService){} 
+
   ngOnInit() {
+    this.getViaje();
     this.loadMap();
   }
+
+
+  message = 'This modal example uses triggers to automatically open a modal';
+  user!: number;
+  name!: string;
+  id_viaje!: number;
+  conductor!: any;
+  viajes: any;
+  viajeSeleccionado: ViajeModel = {
+    id: this.id_viaje,
+    nombre: '',
+    conductor: this.user,
+    cantAsientosDisp: 0,
+    lugarInicio: '',
+    lugarDestino: '',
+    estado: 1
+  };
+
+
+
+  async getViaje(){
+    this.viajes = await lastValueFrom(this._viajeService.getAllViajes());
+    console.log("listaViajes:", this.viajes)
+  }
+  
 
   loadMap() {
     // create a new map by passing HTMLElement
@@ -85,6 +117,17 @@ export class MapsPage implements OnInit{
       alert('Could not display directions due to: ' + status);
     }
   });
+  }
+
+  verRuta() {
+    if (this.viajeSeleccionado) {
+      // Aquí puedes trabajar con el viaje seleccionado para generar la ruta
+      console.log('Viaje seleccionado:', this.viajeSeleccionado);
+      // Puedes usar los datos del viaje para generar la ruta en el mapa
+      
+    } else {
+      console.error('No se ha seleccionado un viaje');
+    }
   }
 
   async getCurrentLocation(){

@@ -14,6 +14,7 @@ import { ViajeService } from '../services/viajeService/viaje.service'
 import { OverlayEventDetail } from '@ionic/core/components';
 import { Geolocation } from '@capacitor/geolocation';
 
+
 declare var google: any;
 
 interface Marker {
@@ -49,6 +50,16 @@ export class AdminPage implements OnInit {
     lat: -33.0481265544542,
     lng: -71.4408920089665,
    };
+
+  coordsOrigin = {
+    lat: 0,
+    lng: 0
+  };
+
+  coordsDestin = {
+    lat: 0,
+    lng: 0
+  };
 
   @ViewChild (IonModal) modal!: IonModal;
 
@@ -151,8 +162,13 @@ export class AdminPage implements OnInit {
     this.router.navigate(['/login'])
   }
 
+  //Rutas
   irHome(){
     this.router.navigate(['/home'], { state: {userInfo: this.userInfoReceived}})
+  }
+
+  irMaps(){
+    this.router.navigate(['/maps'], { state: {userInfo: this.userInfoReceived}})
   }
 
   //GoogleMaps
@@ -179,7 +195,12 @@ export class AdminPage implements OnInit {
     }
   }
 
-  
+  destroyMap() {
+    if (this.map) {
+      this.directionsDisplay.setMap(null); // Elimina las indicaciones del mapa
+      this.map = null; // Establece el objeto Map en null para liberar los recursos
+    }
+  }  
 
   addMarker(marker: Marker) {
     return new google.maps.Marker({
@@ -187,6 +208,10 @@ export class AdminPage implements OnInit {
       map: this.map,
       title: marker.title
     });
+  }
+
+  setMapsLocation(){
+    
   }
 
   private calculateRoute() {

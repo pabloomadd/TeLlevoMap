@@ -1,16 +1,17 @@
+ion-content{
 
-#map {
-  align-content: center;
-  width: 300px;
-  height: 300px;
-  opacity: 0;
-  transition: opacity 150ms ease-in;
-  display: inline-flex;
-    &.show-map{
-  opacity: 1;
+  #map {
+    align-content: center;
+    width: 300px;
+    height: 300px;
+    opacity: 0;
+    transition: opacity 150ms ease-in;
+    display: inline-flex;
+      &.show-map{
+    opacity: 1;
+    }
   }
 }
-
 
 
 
