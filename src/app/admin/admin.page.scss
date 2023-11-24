@@ -1,27 +1,20 @@
-capacitor-google-map{
-  display: inline-block;
-  width: 70%;
+
+#map {
+  align-content: center;
+  width: 300px;
   height: 300px;
+  opacity: 0;
+  transition: opacity 150ms ease-in;
+  display: inline-flex;
+    &.show-map{
+  opacity: 1;
+  }
 }
 
-ion-content{
-  --backgrounfd: none;
-}
 
-ion-card {
-    color: rgb(255, 255, 255);
-    opacity: 0.5;
-    background: #12124e;
-    margin: 10px;
-  
-    --background: rgb(162, 0, 255);
-  }
-  
-  @media (prefers-color-scheme: dark) {
-    ion-card {
-      --background: rgba(197, 49, 255, 0.596);
-    }
-  }
+
+
+
 .controlAnim{
   padding-left: 5%;
     

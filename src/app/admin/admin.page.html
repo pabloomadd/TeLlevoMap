@@ -107,7 +107,7 @@
   </ion-grid>
 
   <ion-accordion-group>
-    <ion-accordion *ngFor="let viaje of viajes">
+    <ion-accordion *ngFor="let viaje of viajes" class="ion-text-center">
       <ion-item slot="header" color="light">
         <ion-label>
           -{{ viaje.nombre }}-<br>
@@ -115,18 +115,25 @@
           Destino: {{ viaje.lugarDestino }} <br>
         </ion-label>
       </ion-item>
-      <div class="ion-padding ion-text-center" slot="content">
-        <capacitor-google-map #map></capacitor-google-map>
-        <br>
-        <ion-button (click)="createMap()">
-          Mapa
+      
+      <div class="ion-padding" slot="content">
+        <ion-button (click)="loadMap()">
+          Ruta
         </ion-button>
-        <ion-button (click)="mapDestroy()" color="warning">
+        <ion-button color="warning">
           Destroy
         </ion-button>
+        <br><br>
+        <div id="map"></div>
+        
+        
+        
+        
       </div>
     </ion-accordion>
   </ion-accordion-group>
+
+  
   
   
 </ion-content>
