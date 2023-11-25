@@ -101,7 +101,7 @@ export class UsuarioPage implements OnInit {
 
 
   irHome(){
-    this.router.navigate(['/home'], { state: {userInfo: this.user}})
+    this.router.navigate(['/home'], { state: {userInfo: this.userInfoReceived}})
   }
 
   irMaps(){

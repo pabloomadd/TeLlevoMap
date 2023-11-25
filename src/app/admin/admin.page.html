@@ -13,18 +13,14 @@
 
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
-    <ion-toolbar>
-           
+    <ion-toolbar>      
       <ion-title class="ion-text-center">TeLlevoApp</ion-title>
-      
     </ion-toolbar>
   </ion-header>
   
-  <div class="ion-text-center">
-    
-    
+  <div class="ion-text-center ion-padding">
     <ion-button id="open-modal" class="ion-padding" shape="round" color="tertiary">
-      Nuevo Viaje
+      Crear Viaje
     </ion-button>
     <!-- Modal Nuevo Viaje -->
     <ion-modal trigger="open-modal">
@@ -89,13 +85,13 @@
       </ng-template>
     </ion-modal>
 
-    <ion-button (click)="irMaps()" shape="round" color="secondary">
+    <ion-button (click)="irMaps()" class="ion-padding" shape="round" color="secondary">
       Mapa de Rutas
     </ion-button>
     
   </div>
-  <br>
-  <h2 class="ion-text-center">Viajes Activos</h2><br>
+  <h2 class="ion-text-center">- Viajes Activos -</h2>
+  
     <!-- Viste de Viajes Activos -->
   <ion-grid class="ion-text-center">
     <ion-row class="titulos">

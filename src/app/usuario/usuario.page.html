@@ -12,11 +12,11 @@
 </ion-header>
 <ion-content [fullscreen]="true">
 
-  <div class="ion-text-center">
+  <div class="ion-text-center ion-padding">
     <ion-button id="open-modal" class="ion-padding" shape="round" color="tertiary">
-      Reservar
+      Reservar Viaje
     </ion-button>
-    <ion-button (click)="irMaps()"shape="round">
+    <ion-button (click)="irMaps()" class="ion-padding" shape="round" color="secondary">
       Mapa de Rutas
     </ion-button>
     <!-- Modal Reservar -->
@@ -51,7 +51,7 @@
   
   </div>
 
-  <h2 class="ion-text-center">Viajes Activos</h2><br>
+  <h2 class="ion-text-center">- Viajes Activos -</h2><br>
   <!-- Viste de Viajes Activos -->
   <ion-grid class="ion-text-center">
   <ion-row class="titulos">

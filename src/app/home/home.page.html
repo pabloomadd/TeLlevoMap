@@ -11,11 +11,10 @@
     </ion-toolbar>
   </ion-header>
 
-  <h1>Bienvenid@, {{this.user.name}}!</h1><br><br>
-  <ion-button (click)="sendPage()" color="success">Ir a viajes</ion-button>
-  <ion-button (click)="cerrarSesion()" color="warning">Cerrar sesión</ion-button>
-  <br><br><br>
-  <ion-button (click)="getCurrentLocation()">GPS</ion-button>
+  <h1>Bienvenid@, {{this.user.name}}!</h1>
+  <ion-button (click)="sendPage()" class="ion-padding" color="success" shape="round">Ir a viajes</ion-button>
+  <ion-button (click)="cerrarSesion()" class="ion-padding" color="warning" shape="round">Cerrar sesión</ion-button>
+  <ion-button (click)="getCurrentLocation()" shape="round">GPS</ion-button>
   <br><br>
   <div id="locationMap"></div>
 </ion-content>
