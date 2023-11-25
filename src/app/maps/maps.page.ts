@@ -55,8 +55,6 @@ export class MapsPage implements OnInit{
     this.loadMap();
   }
 
-
-  message = 'This modal example uses triggers to automatically open a modal';
   user!: number;
   name!: string;
   id_viaje!: number;
@@ -80,11 +78,11 @@ export class MapsPage implements OnInit{
   
 
   loadMap() {
-    // create a new map by passing HTMLElement
+    // Crea un nuevo mapa pasandolo como HTMLElement
     const mapEle: HTMLElement | null = document.getElementById('routeMap');
 
     if (mapEle) {
-      // create map only if map element is found
+      // Se crea el mapa solo si es encontrado
       this.routMap = new google.maps.Map(mapEle, {
         center: {
           //Viña
@@ -168,31 +166,5 @@ export class MapsPage implements OnInit{
         alert('Could not display directions due to: ' + status);
       }
     });
-  }
-
-  async getCurrentLocation(){
-    try {
-      const permissionStatus = await Geolocation.checkPermissions();
-      console.log('Permission Status: ', permissionStatus.location);
-      if (permissionStatus?.location != 'granted') {
-        const requestStatus = await Geolocation.requestPermissions();
-        if (requestStatus.location != 'granted') {
-          //Go to Location Settings
-          return;
-        }
-      }
-      let options: PositionOptions = {
-        maximumAge: 3000,
-        timeout: 10000,
-        enableHighAccuracy: false
-      };
-      const position = await Geolocation.getCurrentPosition(options);
-      console.log(position);
-
-    } catch (error) {
-      console.log(error);
-      throw(error);
-      
-    }
   }
 } 

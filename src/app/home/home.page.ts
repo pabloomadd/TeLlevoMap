@@ -64,11 +64,11 @@ export class HomePage implements OnInit {
   }
 
   loadMap() {
-    // create a new map by passing HTMLElement
+    // Crea un nuevo mapa pasandolo como HTMLElement
     const mapEle: HTMLElement | null = document.getElementById('locationMap');
 
     if (mapEle) {
-      // create map only if map element is found
+      // Se crea el mapa solo si es encontrado
       this.locaMap = new google.maps.Map(mapEle, {
         center: this.centro,
         zoom: 12
@@ -105,7 +105,7 @@ export class HomePage implements OnInit {
       let options: PositionOptions = {
         maximumAge: 3000,
         timeout: 10000,
-        enableHighAccuracy: false
+        enableHighAccuracy: true
       };
       const position = await Geolocation.getCurrentPosition(options);
       console.log(position);
@@ -136,8 +136,6 @@ export class HomePage implements OnInit {
     }
   }
 
-  marcaUbicacion(){
-    
-  }
+  
 
 }

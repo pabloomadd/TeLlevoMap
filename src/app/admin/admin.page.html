@@ -1,11 +1,13 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
+      <ion-buttons slot="start">
+        <ion-button (click)="irHome()">
+          Volver
+        </ion-button>
+      </ion-buttons>
     </ion-buttons>
-    <ion-title>
-      TeLlevoApp
-    </ion-title>
+    
   </ion-toolbar>
 </ion-header>
 
@@ -87,47 +89,10 @@
       </ng-template>
     </ion-modal>
 
-    
     <ion-button (click)="irMaps()" shape="round" color="secondary">
       Mapa de Rutas
     </ion-button>
-    <!-- Modal Mapa -->
-    <ion-modal trigger="modalMap">
-      <ng-template>
-        <ion-header>
-          <ion-toolbar>
-            <ion-title>Rutas</ion-title>
-            <ion-buttons slot="end">
-              <ion-button (click)="cancel">Cerrar</ion-button>
-            </ion-buttons>
-          </ion-toolbar>
-        </ion-header>
-        <ion-content class="ion-text-center">
-
-          <ion-list>
-            <ion-item>  
-              <ion-select label="Seleccione Viaje" [(ngModel)] = "viaje">
-                  <ion-select-option [value]="viaje" *ngFor="let viaje of this.viajes">{{ viaje.nombre }}</ion-select-option>
-              </ion-select>
-            </ion-item>
-          </ion-list>
-          <div class="ion-padding">          
-            <ion-button (click)="loadMap()">
-              Ruta
-            </ion-button>
-            <ion-button (click)="destroyMap()" color="warning">
-              Destroy
-            </ion-button>
-          </div>
-          
-          <div id="map"></div>
-                      
-        </ion-content>
-      </ng-template>
-    </ion-modal>
-
-
-
+    
   </div>
   <br>
   <h2 class="ion-text-center">Viajes Activos</h2><br>
@@ -149,21 +114,5 @@
       <ion-col><span *ngFor="let alumnos of viaje.alumnos">{{ alumnos.name }}<br></span></ion-col>
     </ion-row>
   </ion-grid>
-
-  <ion-accordion-group>
-    <ion-accordion *ngFor="let viaje of viajes" class="ion-text-center">
-      <ion-item slot="header" color="light">
-        <ion-label>
-          -{{ viaje.nombre }}-<br>
-          Inicio: {{ viaje.lugarInicio }} <br>
-          Destino: {{ viaje.lugarDestino }} <br>
-        </ion-label>
-      </ion-item>
-      
-    </ion-accordion>
-  </ion-accordion-group>
-
-  
-  
   
 </ion-content>
