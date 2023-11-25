@@ -3,11 +3,11 @@
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-title>Rutas Map</ion-title>
+    <ion-title class="ion-text-center">Mapa de Rutas</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="ion-text-center">
+<ion-content [fullscreen]="true" class="ion-text-center ion-padding">
   <ion-header collapse="condense">
     <ion-toolbar>
       
@@ -28,8 +28,8 @@
     Gen Ruta
   </ion-button>
   <br>
-  <div>Inicio: </div>
-  <div>Destino: </div>
+  <div>Inicio: {{lugarInicio}} </div>
+  <div>Destino: {{lugarDestino}}</div>
   <br>
   <div id="map"></div>
   <ion-button (click)="getCurrentLocation()">Geolocation</ion-button>

@@ -1,7 +1,7 @@
 import { Component, OnInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
+import { AlertController, IonicModule } from '@ionic/angular';
 import { Geolocation } from '@capacitor/geolocation';
 import { ViajeModel } from '../models/ViajeModel';
 import { ViajeService } from '../services/viajeService/viaje.service';
@@ -28,21 +28,27 @@ interface Marker {
   
 })
 export class MapsPage implements OnInit{
+  alertButtons = ['Action'];
+  
   map = null;
   directionsService = new google.maps.DirectionsService();
   directionsDisplay = new google.maps.DirectionsRenderer();
-  // DUOC Vina
+  
   origin = { 
-    lat: -33.0336435711753,
-    lng: -71.5331795329938,
+    lat: 0,
+    lng: 0,
    };
-  // Centro de Quilpue
+  
   destination = { 
-    lat: -33.0481265544542,
-    lng: -71.4408920089665,
+    lat: 0,
+    lng: 0,
    };
 
-  constructor(private _viajeService: ViajeService){} 
+  lugarInicio: string = '';
+  lugarDestino: string = '';
+
+
+  constructor(private _viajeService: ViajeService, public alertCtrl: AlertController){} 
 
   ngOnInit() {
     this.getViaje();
@@ -65,8 +71,7 @@ export class MapsPage implements OnInit{
     lugarDestino: '',
     estado: 1
   };
-
-
+  
 
   async getViaje(){
     this.viajes = await lastValueFrom(this._viajeService.getAllViajes());
@@ -81,16 +86,17 @@ export class MapsPage implements OnInit{
     if (mapEle) {
       // create map only if map element is found
       this.map = new google.maps.Map(mapEle, {
-        center: this.origin,
+        center: {
+          //Viña
+          lat: -33.02254395854375, 
+          lng: -71.55173445693278
+        },
         zoom: 12
       });
 
       this.directionsDisplay.setMap(this.map);
-
       google.maps.event.addListenerOnce(this.map, 'idle', () => {
-        mapEle.classList.add('show-map');
-        this.calculateRoute();
-
+        mapEle.classList.add('show-map'); 
       });
     } else {
       console.error('Map element not found');
@@ -105,29 +111,63 @@ export class MapsPage implements OnInit{
     });
   }
 
-  private calculateRoute() {
-  this.directionsService.route({
-    origin: this.origin,
-    destination: this.destination,
-    travelMode: google.maps.TravelMode.DRIVING,
-  }, (response: any, status: any)  => {
-    if (status === google.maps.DirectionsStatus.OK) {
-      this.directionsDisplay.setDirections(response);
+
+  async verRuta() {
+    if (this.viajeSeleccionado && this.viajeSeleccionado.lugarDestino && this.viajeSeleccionado.lugarInicio) {
+      try {
+        // Llamar a la función getCoordsUbicacion del servicio ViajeService para el lugar de destino
+        const ubicacionDestino = await lastValueFrom(this._viajeService.getCoordsUbicacion(this.viajeSeleccionado.lugarDestino));
+  
+        // Llamar a la función getCoordsUbicacion del servicio ViajeService para el lugar de inicio
+        const ubicacionInicio = await lastValueFrom(this._viajeService.getCoordsUbicacion(this.viajeSeleccionado.lugarInicio));
+        
+        // Imprimir el resultado obtenido por consola
+        console.log('Resultado de la ubicación del lugar de destino:', ubicacionDestino);
+        console.log('Resultado de la ubicación del lugar de inicio:', ubicacionInicio);
+
+        if (ubicacionDestino && ubicacionDestino.length > 0 && ubicacionInicio && ubicacionInicio.length > 0) {
+          // Asignar los valores de ubicación a las variables de lugarInicio y lugarDestino
+          this.lugarInicio = this.viajeSeleccionado.lugarInicio;
+          this.lugarDestino = this.viajeSeleccionado.lugarDestino;
+
+          // Asignar los valores de latitud y longitud a las variables origin y destination
+          this.origin.lat = ubicacionInicio[0].latitud;
+          this.origin.lng = ubicacionInicio[0].longitud;
+          this.destination.lat = ubicacionDestino[0].latitud;
+          this.destination.lng = ubicacionDestino[0].longitud;
+          
+          //Calcular Ruta
+          this.calculateRoute();
+        }else{
+          console.error('No se encontraron datos de ubicación para el inicio o el destino');
+        }
+
+      } catch (error) {
+        console.error('Error al obtener la ubicación:', error);
+      }
     } else {
-      alert('Could not display directions due to: ' + status);
+      const alert = await this.alertCtrl.create({
+        header: 'Mapa',
+        message: 'Debe seleccionar un Viaje.',
+        buttons: ['OK']
+      });
+  
+      await alert.present();
     }
-  });
   }
 
-  verRuta() {
-    if (this.viajeSeleccionado) {
-      // Aquí puedes trabajar con el viaje seleccionado para generar la ruta
-      console.log('Viaje seleccionado:', this.viajeSeleccionado);
-      // Puedes usar los datos del viaje para generar la ruta en el mapa
-      
-    } else {
-      console.error('No se ha seleccionado un viaje');
-    }
+  private calculateRoute() {
+    this.directionsService.route({
+      origin: this.origin,
+      destination: this.destination,
+      travelMode: google.maps.TravelMode.DRIVING,
+    }, (response: any, status: any) => {
+      if (status === google.maps.DirectionsStatus.OK) {
+        this.directionsDisplay.setDirections(response);
+      } else {
+        alert('Could not display directions due to: ' + status);
+      }
+    });
   }
 
   async getCurrentLocation(){

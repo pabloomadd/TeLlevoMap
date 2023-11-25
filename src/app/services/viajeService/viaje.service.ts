@@ -36,7 +36,7 @@ export class ViajeService {
         return this._httpclient.get<any>(this.URL_SUPABASE + 'Viaje_Alumnos?idViaje=eq.'+ idViaje + '&select=idAlumno', {headers: this.supabaseheaders, responseType: 'json'})
     }
 
-    getInicioViaje(viaje: ViajeAlumnoModel){
-        return this._httpclient.post<ViajeAlumnoModel[]>(this.URL_SUPABASE + 'Ubicacion', viaje, {headers: this.supabaseheaders, responseType: 'json'})
+    getCoordsUbicacion(lugar: any): Observable<any>{
+        return this._httpclient.get<ViajeAlumnoModel>(this.URL_SUPABASE + 'Ubicación?nombre=eq.' + lugar + '&select=latitud,longitud', {headers: this.supabaseheaders, responseType: 'json'})
     }
 }
