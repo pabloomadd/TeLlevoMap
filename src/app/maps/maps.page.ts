@@ -30,7 +30,7 @@ interface Marker {
 export class MapsPage implements OnInit{
   alertButtons = ['Action'];
   
-  map = null;
+  routMap = null;
   directionsService = new google.maps.DirectionsService();
   directionsDisplay = new google.maps.DirectionsRenderer();
   
@@ -81,11 +81,11 @@ export class MapsPage implements OnInit{
 
   loadMap() {
     // create a new map by passing HTMLElement
-    const mapEle: HTMLElement | null = document.getElementById('map');
+    const mapEle: HTMLElement | null = document.getElementById('routeMap');
 
     if (mapEle) {
       // create map only if map element is found
-      this.map = new google.maps.Map(mapEle, {
+      this.routMap = new google.maps.Map(mapEle, {
         center: {
           //Viña
           lat: -33.02254395854375, 
@@ -94,8 +94,8 @@ export class MapsPage implements OnInit{
         zoom: 12
       });
 
-      this.directionsDisplay.setMap(this.map);
-      google.maps.event.addListenerOnce(this.map, 'idle', () => {
+      this.directionsDisplay.setMap(this.routMap);
+      google.maps.event.addListenerOnce(this.routMap, 'idle', () => {
         mapEle.classList.add('show-map'); 
       });
     } else {
@@ -106,7 +106,7 @@ export class MapsPage implements OnInit{
   addMarker(marker: Marker) {
     return new google.maps.Marker({
       position: marker.position,
-      map: this.map,
+      map: this.routMap,
       title: marker.title
     });
   }
