@@ -10,7 +10,7 @@ FUNCIONES:
 -  API Google Maps para vista de Mapas
 -  Base de Datos para Viajes y Usuarios
 -  CRUD de Viajes para Usuario Conductor
--  Consulta de Viajes para Usuario Pasajero
+-  Consulta e Inscripción a Viajes para Usuario Pasajero
 
 CONTEXTO:
 Te LlevoMap es un Proyecto inspirado en Uber. Consiste en la obtención de transporte a altas horas de la noche para y por estudiantes.
