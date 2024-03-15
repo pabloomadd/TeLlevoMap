@@ -1,6 +1,7 @@
 TECNOLOGÍAS UTILIZADAS:
 -  Ionic Framework 7
 -  Lenguaje Principal Angular
+-  Supabase para Base de Datos 
 
 FUNCIONES:
 -  Registro y Login de Usuarios
