@@ -1,3 +1,7 @@
+TECNOLOGÍAS UTILIZADAS:
+-Framwork Ionic 7
+-Lenguaje Principal Angular
+
 FUNCIONES:
 -  Registro y Login de Usuarios
 -  Diferentes Vistas según Usuario
