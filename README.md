@@ -5,6 +5,7 @@ TECNOLOGÍAS UTILIZADAS:
 FUNCIONES:
 -  Registro y Login de Usuarios
 -  Diferentes Vistas según Usuario
+-  Uso de GPS para Puntos de Enecuentro en Mapa
 -  API Google Maps para vista de Mapas
 -  Base de Datos para Viajes y Usuarios
 -  CRUD de Viajes
