@@ -3,6 +3,7 @@ TECNOLOGÍAS UTILIZADAS:
 -  Lenguaje Principal Angular
 -  Supabase para Base de Datos 
 
+
 FUNCIONES:
 -  Registro y Login de Usuarios
 -  Diferentes Vistas según Usuario
@@ -11,6 +12,7 @@ FUNCIONES:
 -  Base de Datos para Viajes y Usuarios
 -  CRUD de Viajes para Usuario Conductor
 -  Consulta e Inscripción a Viajes para Usuario Pasajero
+
 
 CONTEXTO:
 Te LlevoMap es un Proyecto inspirado en Uber. Consiste en la obtención de transporte a altas horas de la noche para y por estudiantes.
