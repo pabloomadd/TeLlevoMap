@@ -1,5 +1,5 @@
 TECNOLOGÍAS UTILIZADAS:
--  Framwork Ionic 7
+-  Ionic Framework 7
 -  Lenguaje Principal Angular
 
 FUNCIONES:
