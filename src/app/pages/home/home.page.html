@@ -11,15 +11,15 @@
     </ion-toolbar>
   </ion-header>
 
-  <h1>Bienvenid&#64;, {{this.user.name}}!</h1>
-  <ion-button (click)="sendPage()" class="ion-padding" color="success" shape="round">Ir a viajes</ion-button>
+  <h1>Bienvenid&#64;!</h1>
+  
+  <h5>Mapa y Ubicación</h5>
+
+  <!-- Navegacion Footer -->
+  <ion-button class="ion-padding" color="success" shape="round">Ir a viajes</ion-button>
   <ion-button (click)="cerrarSesion()" class="ion-padding" color="warning" shape="round">Cerrar sesión</ion-button>
   <ion-button (click)="getCurrentLocation()" shape="round">GPS</ion-button>
-  <br><br>
+
+
   <div id="locationMap"></div>
 </ion-content>
-
-  
-
-
-

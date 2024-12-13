@@ -16,12 +16,12 @@ import { HttpClientModule } from '@angular/common/http';
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, RouterLink, FormsModule, HttpClientModule],
+  imports: [IonicModule, CommonModule, FormsModule, HttpClientModule],
   providers: [UserService]
 })
 
 
-  export class LoginPage implements OnInit, OnDestroy{
+export class LoginPage implements OnInit, OnDestroy {
 
   userLoginModal: IUserLogin = {
     username: '',
@@ -35,11 +35,11 @@ import { HttpClientModule } from '@angular/common/http';
 
   constructor(private route: Router, private _usuarioService: UserService) {
 
-   }
+  }
 
   ngOnDestroy(): void {
     throw new Error('Method not implemented.');
-  } 
+  }
 
   ngOnInit() {
     this.userLoginModalRestart();
@@ -60,7 +60,7 @@ import { HttpClientModule } from '@angular/common/http';
           console.log(user);
           if (user) {
             //EXISTE
-            
+
             let userInfoSend: NavigationExtras = {
               state: {
                 userInfo: user[0]
@@ -68,8 +68,8 @@ import { HttpClientModule } from '@angular/common/http';
             }
             console.log("Usuario existe...");
             this.setObject(user[0]);
-            console.log("Info Enviada: ",userInfoSend);
-            console.log("Info del Usuario: ",user);
+            console.log("Info Enviada: ", userInfoSend);
+            console.log("Info del Usuario: ", user);
 
             this.route.navigate(['/home'], userInfoSend)
           } else {
@@ -87,19 +87,19 @@ import { HttpClientModule } from '@angular/common/http';
     )
   }
 
-  public userLoginModalRestart(): void{
+  public userLoginModalRestart(): void {
     this.userLoginModal.username = '';
     this.userLoginModal.password = '';
   }
 
 
-  goRegistro(){
-    
-    this.route.navigate (['/registro'])
+  goRegistro() {
+
+    this.route.navigate(['/registro'])
 
   }
 
 
 
-  
+
 }

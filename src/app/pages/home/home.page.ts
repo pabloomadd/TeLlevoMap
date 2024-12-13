@@ -24,7 +24,7 @@ interface Marker {
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, RouterLink, FormsModule, HttpClientModule],
+  imports: [IonicModule, CommonModule, FormsModule, HttpClientModule],
   providers: [UserService]
 })
 export class HomePage implements OnInit {
@@ -36,29 +36,34 @@ export class HomePage implements OnInit {
     lng: -71.55173445693278
   }
 
-  user: UserModel;
-  constructor(private router: Router,private _userService: UserService) { 
-    this.user = this.router.getCurrentNavigation()?.extras.state?.['userInfo'];
-    console.log("user id:", this.user.id)
+
+  constructor(private router: Router, private _userService: UserService) {
+
+    console.log("user id:")
     console.log("state:", this.router.getCurrentNavigation()?.extras.state)
   }
 
   ngOnInit() {
-    console.log(this.user.id);
-    this.loadMap();
+    // Iniciar Mapa con GPS
+
+    
+    console.log("Hola");
   }
 
-  sendPage(){
-    this._userService.getUserType(this.user.id).subscribe(type =>{
-      console.log("usertype:", type[0].type);
-      if (type[0].type == 1){
-        this.router.navigate(['/admin'], { state: {userInfo: this.user}})
-      } else {
-        this.router.navigate(['/usuario'], {state: {userInfo: this.user}})
-      }
-    })
-  }
-  cerrarSesion(){
+  // Enviar segun Tipo de Usuario
+  // sendPage() {
+  //   this._userService.getUserType(this).subscribe(type => {
+  //     console.log("usertype:", type[0].type);
+  //     if (type[0].type == 1) {
+  //       this.router.navigate(['/admin'], { state: { userInfo: this.user } })
+  //     } else {
+  //       this.router.navigate(['/usuario'], { state: { userInfo: this.user } })
+  //     }
+  //   })
+  // }
+
+
+  cerrarSesion() {
     this.router.navigate(['/login'])
 
   }
@@ -76,7 +81,7 @@ export class HomePage implements OnInit {
 
       google.maps.event.addListenerOnce(this.locaMap, 'idle', () => {
         mapEle.classList.add('show-map');
-        
+
       });
     } else {
       console.error('Map element not found');
@@ -90,8 +95,8 @@ export class HomePage implements OnInit {
       title: marker.title
     });
   }
-  
-  async getCurrentLocation(){
+
+  async getCurrentLocation() {
     try {
       const permissionStatus = await Geolocation.checkPermissions();
       console.log('Permission Status: ', permissionStatus.location);
@@ -117,7 +122,7 @@ export class HomePage implements OnInit {
         },
         title: 'Mi Ubicacion'
       };
-      
+
 
       const newCentro = {
         lat: position.coords.latitude,
@@ -125,17 +130,17 @@ export class HomePage implements OnInit {
       }
 
       this.centro = newCentro;
-      
+
       this.loadMap();
       this.addMarker(marker);
 
     } catch (error) {
       console.log(error);
-      throw(error);
-      
+      throw (error);
+
     }
   }
 
-  
+
 
 }

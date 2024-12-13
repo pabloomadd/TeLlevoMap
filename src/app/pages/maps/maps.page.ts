@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { AlertController, IonicModule } from '@ionic/angular';
 import { Geolocation } from '@capacitor/geolocation';
 import { ViajeModel } from '../../models/ViajeModel';
-import { ViajeService } from '../../services/viajeService/viaje.service';
+import { ViajeService } from '../../services/viaje.service';
 import { lastValueFrom } from 'rxjs';
 import { HttpClientModule } from '@angular/common/http';
 

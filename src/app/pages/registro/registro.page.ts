@@ -1,10 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
-import { FormsModule,         
-          ReactiveFormsModule,
-   
-        } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 
 @Component({
@@ -12,22 +9,19 @@ import { Router } from '@angular/router';
   templateUrl: './registro.page.html',
   styleUrls: ['./registro.page.scss'],
   standalone: true,
-  imports: [IonicModule, 
-            CommonModule,
-            FormsModule,
-            ReactiveFormsModule
-          ]
+  imports: [IonicModule,
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule
+  ]
 })
-export class RegistroPage implements OnInit {
+export class RegistroPage {
 
   constructor(private router: Router) { }
 
-  ngOnInit() {
-  }
-
-  goLogin(){
+  goLogin() {
     this.router.navigate(['/login'])
   }
 
-  
+
 }

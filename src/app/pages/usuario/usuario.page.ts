@@ -2,7 +2,7 @@ import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
 import { IonModal, IonicModule } from '@ionic/angular';
 import { AlertController } from '@ionic/angular';
 import { AnimationController, IonCard } from '@ionic/angular';
-import { ActivatedRoute, Router, RouterLink} from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { UserModel } from '../../models/UserModel';
 import { Subscription, lastValueFrom, Observable } from 'rxjs';
 import { Preferences } from '@capacitor/preferences';
@@ -12,7 +12,7 @@ import { FormsModule } from '@angular/forms';
 import { IUserLogin } from '../../models/IUserLogin';
 import { HttpClientModule } from '@angular/common/http';
 import { ViajeModel } from '../../models/ViajeModel';
-import { ViajeService } from '../../services/viajeService/viaje.service'
+import { ViajeService } from '../../services/viaje.service'
 import { ViajeAlumnoModel } from '../../models/ViajeAlumnoModel';
 import { OverlayEventDetail } from '@ionic/core/components';
 
@@ -21,7 +21,7 @@ import { OverlayEventDetail } from '@ionic/core/components';
   templateUrl: 'usuario.page.html',
   styleUrls: ['usuario.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, RouterLink, FormsModule, HttpClientModule],
+  imports: [IonicModule, CommonModule, FormsModule, HttpClientModule],
   providers: [ViajeService, UserService]
 })
 
@@ -32,10 +32,10 @@ export class UsuarioPage implements OnInit {
   id_viaje!: number
   userInfoReceived: UserModel;
 
-  @ViewChild (IonModal) modal!: IonModal;
+  @ViewChild(IonModal) modal!: IonModal;
   message = 'This modal example uses triggers to automatically open a modal';
   viajes: any
-  viajeAlumno: ViajeAlumnoModel ={
+  viajeAlumno: ViajeAlumnoModel = {
     idViaje: this.id_viaje,
     idAlumno: this.user
   }
@@ -50,9 +50,9 @@ export class UsuarioPage implements OnInit {
     estado: 1
   };
 
-  constructor(private router: Router,private _userService: UserService, private _viajeService: ViajeService) { 
-      this.userInfoReceived= this.router.getCurrentNavigation()?.extras.state?.['userInfo'];
-      this.user=this.userInfoReceived.id
+  constructor(private router: Router, private _userService: UserService, private _viajeService: ViajeService) {
+    this.userInfoReceived = this.router.getCurrentNavigation()?.extras.state?.['userInfo'];
+    this.user = this.userInfoReceived.id
   }
 
 
@@ -67,12 +67,12 @@ export class UsuarioPage implements OnInit {
     });
   }
 
-  async getViaje(){
+  async getViaje() {
     this.viajes = await lastValueFrom(this._viajeService.getAllViajes());
     console.log("listaViajes:", this.viajes)
   }
-  
-  async addAlumno(viaje: ViajeModel){
+
+  async addAlumno(viaje: ViajeModel) {
     this.modal.dismiss(this.name, 'confirm');
     console.log("InfoViaje:", viaje)
     this.viajeAlumno.idViaje = viaje.id
@@ -88,7 +88,7 @@ export class UsuarioPage implements OnInit {
     this.modal.dismiss(this.name, 'confirm');
   }
 
-  cancel(){
+  cancel() {
     this.modal.dismiss(null, 'cancel');
   }
 
@@ -100,12 +100,12 @@ export class UsuarioPage implements OnInit {
   }
 
 
-  irHome(){
-    this.router.navigate(['/home'], { state: {userInfo: this.userInfoReceived}})
+  irHome() {
+    this.router.navigate(['/home'], { state: { userInfo: this.userInfoReceived } })
   }
 
-  irMaps(){
-    this.router.navigate(['/maps'], { state: {userInfo: this.userInfoReceived}})
+  irMaps() {
+    this.router.navigate(['/maps'], { state: { userInfo: this.userInfoReceived } })
   }
 
 

@@ -1,7 +1,7 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, ViewChild, ElementRef, OnInit} from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, ViewChild, ElementRef, OnInit } from '@angular/core';
 import { IonModal, IonicModule } from '@ionic/angular';
 import { AlertController } from '@ionic/angular';
-import { ActivatedRoute, Router, RouterLink} from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { UserModel } from '../../models/UserModel';
 import { Subscription, lastValueFrom } from 'rxjs';
 import { Preferences } from '@capacitor/preferences';
@@ -10,7 +10,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { ViajeModel } from '../../models/ViajeModel';
-import { ViajeService } from '../../services/viajeService/viaje.service'
+import { ViajeService } from '../../services/viaje.service'
 import { OverlayEventDetail } from '@ionic/core/components';
 import { Geolocation } from '@capacitor/geolocation';
 
@@ -30,26 +30,26 @@ interface Marker {
   templateUrl: 'admin.page.html',
   styleUrls: ['admin.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, RouterLink, FormsModule, HttpClientModule],
+  imports: [IonicModule, CommonModule, FormsModule, HttpClientModule],
   providers: [ViajeService, UserService],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AdminPage implements OnInit {
-  
-  @ViewChild ('map')
+
+  @ViewChild('map')
   map = null;
   directionsService = new google.maps.DirectionsService();
   directionsDisplay = new google.maps.DirectionsRenderer();
   // DUOC Vina
-  origin = { 
+  origin = {
     lat: -33.0336435711753,
     lng: -71.5331795329938,
-   };
+  };
   // Centro de Quilpue
-  destination = { 
+  destination = {
     lat: -33.0481265544542,
     lng: -71.4408920089665,
-   };
+  };
 
   coordsOrigin = {
     lat: 0,
@@ -61,7 +61,7 @@ export class AdminPage implements OnInit {
     lng: 0
   };
 
-  @ViewChild (IonModal) modal!: IonModal;
+  @ViewChild(IonModal) modal!: IonModal;
 
   message = 'This modal example uses triggers to automatically open a modal';
   user!: number;
@@ -87,7 +87,7 @@ export class AdminPage implements OnInit {
   public userList$!: Subscription;
   public userList: UserModel[] = [];
 
-  constructor( private router: Router, private activatedRoute: ActivatedRoute, private _usuarioService: UserService, private _viajeService: ViajeService, private alertController: AlertController) {
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private _usuarioService: UserService, private _viajeService: ViajeService, private alertController: AlertController) {
     this.userInfoReceived = this.router.getCurrentNavigation()?.extras.state?.['userInfo'];
     this.user = this.userInfoReceived?.id
     console.log("user id:", this.user)
@@ -96,11 +96,11 @@ export class AdminPage implements OnInit {
 
   ngOnDestroy(): void {
     throw new Error('Method not implemented.');
-  } 
+  }
 
   ngOnInit() {
     this.getViaje();
-    
+
   }
 
   async setObject(viaje: ViajeModel) {
@@ -111,16 +111,16 @@ export class AdminPage implements OnInit {
   }
 
 
-//Función obtener viajes
-  async getViaje(){
+  //Función obtener viajes
+  async getViaje() {
     const nombres = []
     this.viajes = await lastValueFrom(this._viajeService.getAllViajesConductor(this.userInfoReceived?.id));
-    for (const viaje of this.viajes){
-     let alumnos = await lastValueFrom(this._viajeService.getAlumnoViaje(viaje.id))
-     viaje.alumnos = alumnos
-     console.info("ViajeAlumnos:", viaje.alumnos)
-    
-      for (const alumnos of viaje.alumnos){
+    for (const viaje of this.viajes) {
+      let alumnos = await lastValueFrom(this._viajeService.getAlumnoViaje(viaje.id))
+      viaje.alumnos = alumnos
+      console.info("ViajeAlumnos:", viaje.alumnos)
+
+      for (const alumnos of viaje.alumnos) {
         let name = await lastValueFrom(this._usuarioService.getUserName(alumnos.idAlumno))
         alumnos.name = name[0]
         console.log("NombresAlumnos:", alumnos.name)
@@ -128,26 +128,26 @@ export class AdminPage implements OnInit {
         viaje.alumnos = nombres
         console.log("ListaNombres:", viaje.alumnos)
       }
-      
-    }   
-}  
 
-//Funcion Guardar nuevo Viaje  
-  async newViaje(nuevoViaje : ViajeModel){
+    }
+  }
+
+  //Funcion Guardar nuevo Viaje  
+  async newViaje(nuevoViaje: ViajeModel) {
     nuevoViaje.conductor = this.user
     console.info("nuevo viaje", nuevoViaje)
     this.modal.dismiss(this.name, 'confirm');
     const response = await lastValueFrom(this._viajeService.postNewViaje(nuevoViaje));
     console.log(response)
     this.getViaje();
-  
+
   }
 
   confirm() {
     this.modal.dismiss(this.name, 'confirm');
   }
 
-  cancel(){
+  cancel() {
     this.modal.dismiss(null, 'cancel');
   }
 
@@ -158,17 +158,17 @@ export class AdminPage implements OnInit {
     }
   }
 
-  cerrarSesion(){
+  cerrarSesion() {
     this.router.navigate(['/login'])
   }
 
   //Rutas
-  irHome(){
-    this.router.navigate(['/home'], { state: {userInfo: this.userInfoReceived}})
+  irHome() {
+    this.router.navigate(['/home'], { state: { userInfo: this.userInfoReceived } })
   }
 
-  irMaps(){
-    this.router.navigate(['/maps'], { state: {userInfo: this.userInfoReceived}})
+  irMaps() {
+    this.router.navigate(['/maps'], { state: { userInfo: this.userInfoReceived } })
   }
 
   //GoogleMaps
@@ -200,7 +200,7 @@ export class AdminPage implements OnInit {
       this.directionsDisplay.setMap(null); // Elimina las indicaciones del mapa
       this.map = null; // Establece el objeto Map en null para liberar los recursos
     }
-  }  
+  }
 
   addMarker(marker: Marker) {
     return new google.maps.Marker({
@@ -210,25 +210,25 @@ export class AdminPage implements OnInit {
     });
   }
 
-  setMapsLocation(){
-    
+  setMapsLocation() {
+
   }
 
   private calculateRoute() {
-  this.directionsService.route({
-    origin: this.origin,
-    destination: this.destination,
-    travelMode: google.maps.TravelMode.DRIVING,
-  }, (response: any, status: any)  => {
-    if (status === google.maps.DirectionsStatus.OK) {
-      this.directionsDisplay.setDirections(response);
-    } else {
-      alert('Could not display directions due to: ' + status);
-    }
-  });
+    this.directionsService.route({
+      origin: this.origin,
+      destination: this.destination,
+      travelMode: google.maps.TravelMode.DRIVING,
+    }, (response: any, status: any) => {
+      if (status === google.maps.DirectionsStatus.OK) {
+        this.directionsDisplay.setDirections(response);
+      } else {
+        alert('Could not display directions due to: ' + status);
+      }
+    });
   }
 
-  async getCurrentLocation(){
+  async getCurrentLocation() {
     try {
       const permissionStatus = await Geolocation.checkPermissions();
       console.log('Permission Status: ', permissionStatus.location);
@@ -249,10 +249,10 @@ export class AdminPage implements OnInit {
 
     } catch (error) {
       console.log(error);
-      throw(error);
-      
+      throw (error);
+
     }
   }
 
-      
+
 }

@@ -1,40 +1,18 @@
 import { Routes } from '@angular/router';
+import { RegistroPage } from './pages/registro/registro.page';
+import { LoginPage } from './pages/login/login.page';
+import { HomePage } from './pages/home/home.page';
+import { UsuarioPage } from './pages/usuario/usuario.page';
+import { AdminPage } from './pages/admin/admin.page';
+import { MapsPage } from './pages/maps/maps.page';
 
 export const routes: Routes = [
-  {
-    path: 'registro',
-    loadComponent: () => import('./pages/registro/registro.page').then( m => m.RegistroPage)
-  },
-  {
-    path: 'login',
-    loadComponent: () => import('./pages/login/login.page').then( m => m.LoginPage)
-  },
-  {
-    path: 'home',
-    loadComponent: () => import('./pages/home/home.page').then( m => m.HomePage)
-  },
-  {
-    path: 'usuario/:id',
-    loadComponent: () => import('./pages/usuario/usuario.page').then( m => m.UsuarioPage)
-  },
-  {
-    path: 'usuario',
-    loadComponent: () => import('./pages/usuario/usuario.page').then( m => m.UsuarioPage)
-  },
-
-  {
-    path: 'admin',
-    loadComponent: () => import('./pages/admin/admin.page').then( m => m.AdminPage)
-  },
-  
-  {
-    path: 'maps',
-    loadComponent: () => import('./pages/maps/maps.page').then( m => m.MapsPage)
-  },
-  
-  {
-    path: '**',
-    redirectTo: 'login'
-  }
+  { path: 'registro', component: RegistroPage },
+  { path: 'login', component: LoginPage },
+  { path: 'home', component: HomePage },
+  { path: 'user', component: UsuarioPage },
+  { path: 'admin', component: AdminPage },
+  { path: 'maps', component: MapsPage },
+  {path: '**', redirectTo: 'home', pathMatch: "full"}
 
 ];
