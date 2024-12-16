@@ -19,7 +19,7 @@ import { OverlayEventDetail } from '@ionic/core/components';
 @Component({
   selector: 'app-usuario',
   templateUrl: 'usuario.page.html',
-  styleUrls: ['usuario.page.scss'],
+  styleUrls: ['usuario.page.css'],
   standalone: true,
   imports: [IonicModule, CommonModule, FormsModule, HttpClientModule],
   providers: [ViajeService, UserService]

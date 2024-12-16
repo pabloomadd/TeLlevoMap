@@ -21,7 +21,7 @@ interface Marker {
 @Component({
   selector: 'app-maps',
   templateUrl: './maps.page.html',
-  styleUrls: ['./maps.page.scss'],
+  styleUrls: ['./maps.page.css'],
   standalone: true,
   imports: [IonicModule, CommonModule, FormsModule, HttpClientModule],
   providers: [ViajeService],

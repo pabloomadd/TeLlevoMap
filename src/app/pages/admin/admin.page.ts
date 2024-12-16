@@ -28,7 +28,7 @@ interface Marker {
 @Component({
   selector: 'app-admin',
   templateUrl: 'admin.page.html',
-  styleUrls: ['admin.page.scss'],
+  styleUrls: ['admin.page.css'],
   standalone: true,
   imports: [IonicModule, CommonModule, FormsModule, HttpClientModule],
   providers: [ViajeService, UserService],

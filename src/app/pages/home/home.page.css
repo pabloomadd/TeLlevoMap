@@ -35,7 +35,7 @@ font-size: smaller;
 
 }
 
-//Clases de Viajes Activos
+/* Clases de Viajes Activos */
 .ViajeView{
   padding: 10px; /* Controla el espaciado interno de los ion-item */
   font-size: 90%;

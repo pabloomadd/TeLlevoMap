@@ -14,7 +14,7 @@ import { HttpClientModule } from '@angular/common/http';
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
-  styleUrls: ['./login.page.scss'],
+  styleUrls: ['./login.page.css'],
   standalone: true,
   imports: [IonicModule, CommonModule, FormsModule, HttpClientModule],
   providers: [UserService]

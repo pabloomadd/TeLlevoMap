@@ -1,0 +1,14 @@
+#map {
+    height: 500px;
+    width: 90%;
+    margin: auto;
+    display: flex;
+    border: 3px solid #fa0000; /* Opcional: para ver los límites del mapa */
+    
+}
+
+.routeControl{
+    margin: auto;
+    display: flex;
+    width: 90%;
+}

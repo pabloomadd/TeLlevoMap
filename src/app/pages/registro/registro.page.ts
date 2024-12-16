@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-registro',
   templateUrl: './registro.page.html',
-  styleUrls: ['./registro.page.scss'],
+  styleUrls: ['./registro.page.css'],
   standalone: true,
   imports: [IonicModule,
     CommonModule,

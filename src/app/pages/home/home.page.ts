@@ -22,7 +22,7 @@ interface Marker {
 @Component({
   selector: 'app-home',
   templateUrl: './home.page.html',
-  styleUrls: ['./home.page.scss'],
+  styleUrls: ['./home.page.css'],
   standalone: true,
   imports: [IonicModule, CommonModule, FormsModule, HttpClientModule],
   providers: [UserService]
