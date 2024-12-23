@@ -1,0 +1,15 @@
+:host {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 1000;
+    background-color: #373C3E;
+    color: white;
+    text-align: center;
+    padding: 1rem;
+}
+
+ion-button{    
+    margin-left: 30px;
+    margin-right: 30px;
+}
