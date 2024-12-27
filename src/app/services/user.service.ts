@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { UserModel } from '../models/UserModel';
 import { Observable } from "rxjs";
+import { environment } from 'src/environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,7 @@ export class UserService {
   }
 
   supabaseheaders = new HttpHeaders()
-    .set('apikey', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9hcGtkb3prbGhpamtpcHJibWlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTcyOTU0NzcsImV4cCI6MjAxMjg3MTQ3N30.EQemub-4ElD_SeeJEor-Gmr8m-9hFpCtw5sa68yxS38')
+    .set('apikey', environment.SupaK)
 
   getUserListSupaBase(): Observable<UserModel[]> {
     console.log(this.supabaseheaders);

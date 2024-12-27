@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AlertController, IonicModule } from '@ionic/angular';
 import { Geolocation } from '@capacitor/geolocation';
-import { ViajeModel } from '../../models/ViajeModel';
+import { ViajeModel } from '../../models/IViaje';
 import { ViajeService } from '../../services/viaje.service';
 import { lastValueFrom } from 'rxjs';
 import { HttpClientModule } from '@angular/common/http';

@@ -30,6 +30,7 @@
     "@capacitor/preferences": "^6.0.3",
     "@capacitor/status-bar": "6.0.2",
     "@ionic/angular": "^8.0.0",
+    "@supabase/supabase-js": "^2.47.10",
     "ionicons": "^7.2.1",
     "leaflet": "^1.9.4",
     "rxjs": "~7.8.0",

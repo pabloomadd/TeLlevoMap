@@ -1,0 +1,30 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Mis Viajes</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <!-- Viaje Activo -->
+
+  <!-- Vista de Todos los Viajes -->
+  <div class="trips">
+
+    <ion-grid class="ion-text-center">
+      @for (viaje of viajes; track $index){
+      <ion-row class="titulos">
+        <ion-col>Nombre</ion-col>
+        <ion-col>Asientos</ion-col>
+        <ion-col>Inicio</ion-col>
+        <ion-col>Destino</ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>{{ viaje.nombre }}</ion-col>
+        <ion-col>{{ viaje.seat1 }} , {{viaje.seat2}}, {{viaje.seat3}}. {{viaje.seat4}}</ion-col>
+        <ion-col>{{ viaje.start }}</ion-col>
+        <ion-col>{{ viaje.end }}</ion-col>
+      </ion-row>
+      }
+    </ion-grid>
+  </div>
+</ion-content>
