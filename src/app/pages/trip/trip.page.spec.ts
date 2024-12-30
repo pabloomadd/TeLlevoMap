@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TripPage } from './trip.page';
+import { TripPage } from './TripPage';
 
 describe('TripPage', () => {
   let component: TripPage;

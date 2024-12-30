@@ -1,7 +1,21 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonCol, IonContent, IonGrid, IonHeader, IonRow, IonTitle, IonToolbar } from '@ionic/angular/standalone';
+import {
+  IonCol,
+  IonContent,
+  IonGrid,
+  IonHeader,
+  IonRow,
+  IonTitle,
+  IonToolbar,
+  IonButton,
+  IonModal,
+  IonButtons,
+  IonItem,
+  IonLabel,
+  IonInput,
+} from '@ionic/angular/standalone';
 import { IViaje } from 'src/app/models/IViaje';
 import { ViajeService } from 'src/app/services/viaje.service';
 import { Subscription } from 'rxjs';
@@ -11,16 +25,43 @@ import { Subscription } from 'rxjs';
   templateUrl: './trip.page.html',
   styleUrls: ['./trip.page.css'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, IonGrid, IonRow, IonCol, CommonModule, FormsModule]
+  imports: [
+    IonInput,
+    IonLabel,
+    IonButton,
+    IonButtons,
+    IonContent,
+    IonHeader,
+    IonTitle,
+    IonToolbar,
+    IonGrid,
+    IonRow,
+    IonCol,
+    IonModal,
+    IonItem,
+    CommonModule,
+    FormsModule,
+  ],
 })
 export class TripPage implements OnInit {
-
-  viajeActivo: boolean = false
+  viajeActivo: boolean = false;
   viajes: IViaje[] = [];
   private Subscription!: Subscription;
 
+  isDriver: boolean = true;
 
-  constructor(private ViajeService: ViajeService) { }
+  newViaje = {
+    nombre: 'ViajePrueba',
+    seat1: true,
+    seat2: false,
+    seat3: false,
+    seat4: true,
+    start: 'Viña',
+    end: 'Quilpue',
+    driver: 'Jacinto Paredes',
+  };
+
+  constructor(private ViajeService: ViajeService) {}
 
   ngOnInit() {
     this.loadTrips();
@@ -33,6 +74,28 @@ export class TripPage implements OnInit {
     });
   }
 
+  createTrip() {
+    this.ViajeService.postTrip(this.newViaje).subscribe({
+      next: (data) => {
+        console.log('Viaje Agregado: ', data);
+      },
+      error: (error) => {
+        console.error('Error al Agregar Viaje: ', error);
+      },
+      complete: () => console.log('Inserción Completada'),
+    });
+  }
 
-
+  resetForm() {
+    this.newViaje = {
+      nombre: '',
+      seat1: true,
+      seat2: true,
+      seat3: true,
+      seat4: true,
+      start: '',
+      end: '',
+      driver: '',
+    };
+  }
 }

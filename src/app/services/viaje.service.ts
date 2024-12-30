@@ -31,4 +31,29 @@ export class ViajeService {
         });
     });
   }
+
+  postTrip(viaje: {
+    nombre: string;
+    seat1: boolean | null;
+    seat2: boolean | null;
+    seat3: boolean | null;
+    seat4: boolean | null;
+    start: string;
+    end: string;
+    driver: string;
+  }): Observable<any> {
+    return new Observable((observer) => {
+      this.supabase
+        .from('trip')
+        .insert([viaje])
+        .then(({ data, error }) => {
+          if (error) {
+            observer.error(error);
+          }else{
+            observer.next(data);
+          }
+          observer.complete();
+        });
+    });
+  }
 }
