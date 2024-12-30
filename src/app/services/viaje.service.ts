@@ -20,7 +20,11 @@ export class ViajeService {
     return new Observable((observer) => {
       this.supabase
         .from('trip')
-        .select('*')
+        .select(
+          `*,
+          start(name),
+          end(name)`
+        )
         .then(({ data, error }) => {
           if (error) {
             observer.error(error);
@@ -49,7 +53,7 @@ export class ViajeService {
         .then(({ data, error }) => {
           if (error) {
             observer.error(error);
-          }else{
+          } else {
             observer.next(data);
           }
           observer.complete();

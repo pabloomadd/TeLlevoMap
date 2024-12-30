@@ -1,5 +1,3 @@
-import { ILocation } from "./ILocation";
-
 export interface IViaje {
 
     id: number,
@@ -12,4 +10,11 @@ export interface IViaje {
     start: ILocation,
     end: ILocation,
     state: string,
+}
+
+export interface ILocation {
+  id: number
+  name: string;
+  latitude: number;
+  longitude: number;
 }
