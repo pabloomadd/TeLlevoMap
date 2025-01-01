@@ -34,3 +34,14 @@
 .creaBtn{
   margin-top: 20px;
 }
+
+.invalid{
+  border-width: 1px;
+  border-radius: 10px;
+  border-color: red;
+  border-style: solid;
+}
+
+.dangerTxt{
+  font-size: small;
+}

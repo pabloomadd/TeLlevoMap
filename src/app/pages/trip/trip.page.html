@@ -1,6 +1,6 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>Mis Viajes</ion-title>
+    <ion-title class="ion-text-center">Mis Viajes</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -16,33 +16,57 @@
       <ng-template>
         <ion-header>
           <ion-toolbar>
-            <ion-title>Crear Nuevo Viaje</ion-title>
+            <ion-title>Crear Viaje</ion-title>
             <ion-buttons slot="end">
               <ion-button (click)="modal.dismiss()">Cerrar</ion-button>
             </ion-buttons>
           </ion-toolbar>
         </ion-header>
         <ion-content>
-          <form class="tripForm">
+          <form class="tripForm" [formGroup]="tripForm" (submit)="createTrip()">
             <ion-item>
-              <ion-label position="floating">Nombre del Viaje:</ion-label>
-              <ion-input type="text"></ion-input>
+              <ion-label position="stacked">Nombre del Viaje:</ion-label>
+              <ion-input
+                [ngClass]="{'invalid': formValidError('nombre', 'required') || formValidError('nombre', 'minlength')}"
+                type="text" formControlName="nombre"
+
+              ></ion-input>
+                @if (formValidError('nombre', 'required')) {
+                  <ion-text color="danger">
+                    <p class="dangerTxt">*Nombre es requerido</p>
+                  </ion-text>
+                }
+                @if (formValidError('nombre', 'minlength')) {
+                  <ion-text color="danger">
+                    <p class="dangerTxt">*Nombre debe contener al menos 6 carácteres</p>
+                  </ion-text>
+                }
+
+            </ion-item>
+
+            <!-- Lista de Lugares -->
+            <ion-item>
+              <ion-select label="Inicio:" labelPlacement="stacked" formControlName="start">
+                @for (ubi of ubis; track $index) {
+                <ion-select-option [value]="ubi.id">{{ubi.name}}</ion-select-option>
+                }
+              </ion-select>
             </ion-item>
             <ion-item>
-              <ion-label position="floating">Inicio:</ion-label>
-              <ion-input type="text"></ion-input>
+              <ion-select label="Destino:" labelPlacement="stacked" formControlName="end">
+                @for (ubi of ubis; track $index) {
+                  <ion-select-option [value]="ubi.id">{{ubi.name}}</ion-select-option>
+                  }
+              </ion-select>
             </ion-item>
+
             <ion-item>
-              <ion-label position="floating">Destino:</ion-label>
-              <ion-input type="text"></ion-input>
-            </ion-item>
-            <ion-item>
-              <ion-label position="floating">Conductor:</ion-label>
-              <ion-input type="text"></ion-input>
+              <ion-label position="stacked">Conductor:</ion-label>
+              <ion-input type="text" formControlName="driver" [placeholder]="iDriver" [value]="iDriver" readonly></ion-input>
             </ion-item>
             <div class="creaBtn ion-text-center">
-              <ion-button block color="primary" type="submit" [disabled]="true">
-                Crear
+              <ion-button block color="primary" type="submit" [disabled]="!tripForm.valid">
+                Crear Viaje
               </ion-button>
             </div>
           </form>

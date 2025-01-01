@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { Observable } from 'rxjs';
-import { IViaje } from 'src/app/models/IViaje';
+import { ILocation, IViaje } from 'src/app/models/IViaje';
 import { environment } from 'src/environments/environment.development';
 
 @Injectable({
@@ -38,10 +38,10 @@ export class ViajeService {
 
   postTrip(viaje: {
     nombre: string;
-    seat1: boolean | null;
-    seat2: boolean | null;
-    seat3: boolean | null;
-    seat4: boolean | null;
+    seat1: boolean;
+    seat2: boolean;
+    seat3: boolean;
+    seat4: boolean;
     start: string;
     end: string;
     driver: string;
@@ -55,6 +55,23 @@ export class ViajeService {
             observer.error(error);
           } else {
             observer.next(data);
+          }
+          observer.complete();
+        });
+    });
+  }
+
+  // Supa Locartions
+  getLocations(): Observable<ILocation[]> {
+    return new Observable((observer) => {
+      this.supabase
+        .from('location')
+        .select(`*`)
+        .then(({ data, error }) => {
+          if (error) {
+            observer.error(error);
+          } else {
+            observer.next(data || []);
           }
           observer.complete();
         });

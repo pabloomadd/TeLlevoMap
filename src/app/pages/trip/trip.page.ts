@@ -1,6 +1,12 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import {
   IonCol,
   IonContent,
@@ -15,8 +21,11 @@ import {
   IonItem,
   IonLabel,
   IonInput,
+  IonText,
+  IonSelect,
+  IonSelectOption,
 } from '@ionic/angular/standalone';
-import { IViaje } from 'src/app/models/IViaje';
+import { ILocation, IViaje } from 'src/app/models/IViaje';
 import { ViajeService } from 'src/app/services/viaje.service';
 import { Subscription } from 'rxjs';
 
@@ -39,45 +48,66 @@ import { Subscription } from 'rxjs';
     IonCol,
     IonModal,
     IonItem,
+    IonText,
+    IonSelect,
+    IonSelectOption,
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
   ],
 })
 export class TripPage implements OnInit {
+  private _ViajeService = inject(ViajeService);
+
+  // Arrays Viajes
   viajeActivo: boolean = false;
   viajes: IViaje[] = [];
-  private Subscription!: Subscription;
+  ubis: ILocation[] = [];
 
+  // Suscripciones
+  private viajeSub!: Subscription;
+  private ubiSub!: Subscription;
+
+  // Flags isDriver
   isDriver: boolean = true;
+  iDriver: string = 'Sergio Apablaza';
 
-  newViaje = {
-    nombre: 'ViajePrueba',
-    seat1: true,
-    seat2: false,
-    seat3: false,
-    seat4: true,
-    start: 'Viña',
-    end: 'Quilpue',
-    driver: 'Jacinto Paredes',
-  };
+  tripForm!: FormGroup;
 
-  constructor(private ViajeService: ViajeService) {}
+  // Viaje de Prueba
+
+
+  constructor(private formBuilder: FormBuilder) {
+    this.tripForm = this.formBuilder.group({
+      nombre: ['', [Validators.required, Validators.minLength(6)]],
+      seat1: [false, Validators.required],
+      seat2: [false, Validators.required],
+      seat3: [false, Validators.required],
+      seat4: [false, Validators.required],
+      start: ['', Validators.required],
+      end: ['', Validators.required],
+      driver: [this.iDriver, Validators.required],
+      state: [true, Validators.required]
+    });
+  }
 
   ngOnInit() {
     this.loadTrips();
+    this.loadLocations();
   }
 
+  // Suscripcion a GetTrips
   private loadTrips(): void {
-    this.Subscription = this.ViajeService.getTrips().subscribe({
+    this.viajeSub = this._ViajeService.getTrips().subscribe({
       next: (data) => (this.viajes = data),
-      error: (error) => console.error('Error fetching trips:', error),
+      error: (error) => console.error('Error fetching Viajes: ', error),
     });
   }
 
   createTrip() {
-    this.ViajeService.postTrip(this.newViaje).subscribe({
+    this._ViajeService.postTrip(this.tripForm.value).subscribe({
       next: (data) => {
-        console.log('Viaje Agregado: ', data);
+        console.log('Viaje Agregado');
       },
       error: (error) => {
         console.error('Error al Agregar Viaje: ', error);
@@ -86,16 +116,20 @@ export class TripPage implements OnInit {
     });
   }
 
-  resetForm() {
-    this.newViaje = {
-      nombre: '',
-      seat1: true,
-      seat2: true,
-      seat3: true,
-      seat4: true,
-      start: '',
-      end: '',
-      driver: '',
-    };
+  // Suscripcion a GetLocations
+  loadLocations() {
+    this.ubiSub = this._ViajeService.getLocations().subscribe({
+      next: (data) => {
+        this.ubis = data;
+      },
+      error: (error) => console.log('Error fetching Locations: ', error),
+    });
+  }
+
+  formValidError(controlName: string, errorType: string) {
+    return (
+      this.tripForm.get(controlName)?.hasError(errorType) &&
+      this.tripForm.get(controlName)?.touched
+    );
   }
 }
