@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
@@ -7,11 +7,6 @@ import { IonicModule } from '@ionic/angular';
   templateUrl: './mobnav.component.html',
   styleUrls: ['./mobnav.component.css'],
   standalone: true,
-  imports:[IonicModule, RouterModule]
+  imports: [IonicModule, RouterModule],
 })
-export class MobnavComponent {
-
-  constructor() { }
-
-
-}
+export class MobnavComponent {}

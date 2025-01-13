@@ -1,46 +1,84 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { UserModel } from '../models/UserModel';
-import { Observable } from "rxjs";
+import { BehaviorSubject, lastValueFrom, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment.development';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import { IUser } from '../models/IUser';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UserService {
+  private supabase: SupabaseClient;
 
-  URL_SUPABASE = 'https://oapkdozklhijkiprbmig.supabase.co/rest/v1/'
+  private authState = new BehaviorSubject<boolean>(false);
+  isAuth$ = this.authState.asObservable();
 
-
-  constructor(private _httpclient: HttpClient) {
-
+  // Supabase Client
+  constructor() {
+    this.supabase = createClient(environment.SupaUrl, environment.SupaK);
   }
 
-  supabaseheaders = new HttpHeaders()
-    .set('apikey', environment.SupaK)
-
-  getUserListSupaBase(): Observable<UserModel[]> {
-    console.log(this.supabaseheaders);
-    return this._httpclient.get<UserModel[]>(this.URL_SUPABASE, { headers: this.supabaseheaders, responseType: 'json' });
+  // Nuevo Usuario
+  createUser(email: string, password: string) {
+    return this.supabase.auth.signUp({ email, password });
   }
 
-  getUser(user_id: string): Observable<UserModel>{
-    return this._httpclient.get<UserModel>(this.URL_SUPABASE+'User?id=eq.'+ user_id + '&select=*',{ headers: this.supabaseheaders, responseType: 'json' });
+  verifUserExist(email: string): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      this.supabase
+        .from('user')
+        .select('email')
+        .eq('email', email)
+        .then(({ data, error }) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve(data.length > 0); // Retorna true si existe, false si no
+          }
+        });
+    });
   }
 
-  getUserName(user_id: number): Observable<any>{
-    return this._httpclient.get<any>(this.URL_SUPABASE+'User?id=eq.'+ user_id + '&select=name', { headers: this.supabaseheaders, responseType: 'json' });
+  // Manejo de Sesion
+  logInWEmail(email: string, password: string) {
+    return this.supabase.auth
+      .signInWithPassword({ email, password })
+      .then((response) => {
+        if (response.error) {
+          throw new Error(response.error.message);
+        }
+        console.log('Response: ', response);
+        this.authState.next(true);
+        return response;
+      });
   }
 
-  getLoginUser(username: string, password: string): Observable<UserModel[]>{
-    return this._httpclient.get<UserModel[]>(this.URL_SUPABASE+'User?select=id,name,last_name,username,password,email,type&username=eq.'+ username +'&password=eq.'+ password,{ headers: this.supabaseheaders, responseType: 'json' });
-  } 
-  
-  getUserType(user_id: number): Observable<any>{
-    console.log("getUser:", user_id)
-    return this._httpclient.get<any>(this.URL_SUPABASE+"User?id=eq."+user_id+ "&select=type", { headers: this.supabaseheaders, responseType: 'json' });
+  logOut() {
+    return this.supabase.auth.signOut().then(() => {
+      this.authState.next(false);
+    });
   }
 
-
+  //DB Crud
+  //Crear Usuario
+  creatUsrData(usr: {
+    name: string;
+    lastname: string;
+    email: string;
+    usrType: string;
+  }): Observable<IUser[]> {
+    return new Observable((observer) => {
+      this.supabase
+        .from('user')
+        .insert([usr])
+        .then(({ data, error }) => {
+          if (error) {
+            observer.error(error);
+          } else {
+            observer.next(data || []);
+          }
+          observer.complete();
+        });
+    });
+  }
 }
-

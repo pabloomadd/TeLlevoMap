@@ -1,0 +1,11 @@
+.invalid {
+  border-bottom: 1px solid red;
+}
+
+ion-spinner {
+  margin-left: 10px;
+}
+
+ion-button {
+  margin-top: 10px;
+}

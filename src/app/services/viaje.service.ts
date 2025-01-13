@@ -45,7 +45,7 @@ export class ViajeService {
     start: string;
     end: string;
     driver: string;
-  }): Observable<any> {
+  }): Observable<IViaje[]> {
     return new Observable((observer) => {
       this.supabase
         .from('trip')
@@ -54,14 +54,14 @@ export class ViajeService {
           if (error) {
             observer.error(error);
           } else {
-            observer.next(data);
+            observer.next(data || []);
           }
           observer.complete();
         });
     });
   }
 
-  // Supa Locartions
+  // Supa Locations
   getLocations(): Observable<ILocation[]> {
     return new Observable((observer) => {
       this.supabase

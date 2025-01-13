@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { UserService } from '../../services/user.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ViajeService } from '../../services/viaje.service'
-
+import { ViajeService } from '../../services/viaje.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-usuario',
@@ -12,21 +12,24 @@ import { ViajeService } from '../../services/viaje.service'
   styleUrls: ['usuario.page.css'],
   standalone: true,
   imports: [IonicModule, CommonModule, FormsModule],
-  providers: [ViajeService, UserService]
+  providers: [ViajeService, UserService],
 })
-
 export class UsuarioPage implements OnInit {
+  _userService = inject(UserService);
+  _router = inject(Router);
 
-  constructor() {
-
-  }
+  constructor() {}
 
   ngOnInit() {
-    console.log("Hola Usuario")
+    console.log('Hola Usuario');
   }
 
-  getInfo() {
+  getInfo() {}
 
+  logOut() {
+    console.log('Cerrando Sesión...');
+    this._userService.logOut();
+    localStorage.clear(); //Limpeiza de localStorage
+    window.location.reload(); //Fuerza la recarga
   }
-
 }

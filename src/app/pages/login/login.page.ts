@@ -1,105 +1,75 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
-import { Router, NavigationExtras, RouterLink } from '@angular/router';
-import { IUserLogin } from '../../models/IUserLogin';
-import { UserModel } from '../../models/UserModel';
-import { UserService } from '../../services/user.service';
-import { Preferences } from '@capacitor/preferences';
-import { Subscription, Observable } from 'rxjs';
-import { HttpClientModule } from '@angular/common/http';
-
+import { Router, RouterModule } from '@angular/router';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.css'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, HttpClientModule],
-  providers: [UserService]
+  imports: [
+    IonicModule,
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    RouterModule,
+  ],
 })
+export class LoginPage implements OnInit {
+  // Services
+  private _userService = inject(UserService);
+  private _router = inject(Router);
 
+  // Flags
+  logging: boolean = false;
 
-export class LoginPage implements OnInit, OnDestroy {
+  // Forms
+  logForm!: FormGroup;
 
-  userLoginModal: IUserLogin = {
-    username: '',
-    password: ''
-  };
-
-
-  public userExists?: UserModel;
-  public userList$!: Subscription;
-  public userList: UserModel[] = [];
-
-  constructor(private route: Router, private _usuarioService: UserService) {
-
-  }
-
-  ngOnDestroy(): void {
-    throw new Error('Method not implemented.');
-  }
-
-  ngOnInit() {
-    this.userLoginModalRestart();
-
-  }
-
-  async setObject(user: UserModel) {
-    await Preferences.set({
-      key: 'user',
-      value: JSON.stringify(user)
+  constructor(private formBuilder: FormBuilder) {
+    this.logForm = this.formBuilder.group({
+      email: ['', [Validators.required, Validators.email]],
+      pass: ['', [Validators.required, Validators.minLength(6)]],
     });
   }
 
-  async userLogin(userLoginInfo: IUserLogin) {
-    this._usuarioService.getLoginUser(userLoginInfo.username, userLoginInfo.password).subscribe(
-      {
-        next: (user: UserModel[]) => {
-          console.log(user);
-          if (user) {
-            //EXISTE
-
-            let userInfoSend: NavigationExtras = {
-              state: {
-                userInfo: user[0]
-              }
-            }
-            console.log("Usuario existe...");
-            this.setObject(user[0]);
-            console.log("Info Enviada: ", userInfoSend);
-            console.log("Info del Usuario: ", user);
-
-            this.route.navigate(['/home'], userInfoSend)
-          } else {
-            //NO EXISTE
-            console.log("Usuario no existe...");
-          }
-        },
-        error: (err) => {
-
-        },
-        complete: () => {
-
-        }
-      }
-    )
+  ngOnInit() {
+    console.log('Hola Login');
   }
 
-  public userLoginModalRestart(): void {
-    this.userLoginModal.username = '';
-    this.userLoginModal.password = '';
+  // Lógica Login
+  async logIn() {
+    this.logging = true;
+    try {
+      // Loguear
+      const loginResp = await this._userService.logInWEmail(
+        this.logForm.value.email,
+        this.logForm.value.pass
+      );
+      console.log('Logueo con Éxito');
+
+      this._router.navigate(['/mapview']);
+    } catch (error) {
+      console.error('Error en Proceso de Login: ', error);
+    } finally {
+      this.logForm.reset();
+      this.logging = false;
+    }
   }
 
-
-  goRegistro() {
-
-    this.route.navigate(['/registro'])
-
+  formValidError(controlName: string, errorType: string) {
+    return (
+      this.logForm.get(controlName)?.hasError(errorType) &&
+      this.logForm.get(controlName)?.touched
+    );
   }
-
-
-
-
 }

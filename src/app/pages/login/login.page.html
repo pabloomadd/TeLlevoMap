@@ -1,60 +1,54 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title class="ion-text-center">TeLlevoApp</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content>
-
-  <!-- Portada -->
   <ion-card>
     <ion-card-content>
-      
       <ion-card-header>
-        <ion-card-title class="ion-text-center">
-          Inicio de sesión
-        </ion-card-title>
-      </ion-card-header>  
-
+        <ion-card-title class="ion-text-center"> TeLLevoApp </ion-card-title>
+      </ion-card-header>
     </ion-card-content>
-    <br>
+    <br />
     <ion-card-content class="ion-text-center">
-    
-      <img alt="logoApp" src="assets/imgs/coche.png">  
-        
+      <img alt="logoApp" src="assets/imgs/coche.png" />
     </ion-card-content>
-    <br>
+    <br />
     <ion-card-content>
-      <div class="fields">
-        <ion-label>Usuario</ion-label>  
-        <ion-input class="field" fill="solid" [(ngModel)]="userLoginModal.username"></ion-input>
-        <br>
-        <ion-label>Contraseña</ion-label>
-        <ion-input class="field" fill="solid" [(ngModel)]="userLoginModal.password" type="password"></ion-input>
-      </div>
-      <br>
+      <form [formGroup]="logForm" (submit)="logIn()">
+        <ion-item>
+          <ion-input
+            formControlName="email"
+            type="text"
+            label="Correo Electrónico"
+            labelPlacement="floating"
+            fill="solid"
+          ></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input
+            formControlName="pass"
+            type="password"
+            label="Contraseña"
+            labelPlacement="floating"
+            fill="solid"
+          ></ion-input>
+        </ion-item>
+        <div class="ion-text-center">
+          <ion-button
+            color="success"
+            type="submit"
+            [disabled]="logForm.invalid"
+          >
+            Acceder
+          </ion-button>
+        </div>
+      </form>
+
       <div class="ion-text-center">
-        <ion-button color="success" (click)="userLogin(userLoginModal)">Acceder</ion-button>
-      </div>
-      
-      <!-- <div class="ion-text-center">
-        <br><br>
+        <br /><br />
         ¿Aún no tienes cuenta?
-        <br>
-        <ion-button color="tertiary" (click)="goRegistro()">
+        <br />
+        <ion-button color="tertiary" [routerLink]="['/registro']">
           Registrate
-        </ion-button>        
-      </div> -->
+        </ion-button>
+      </div>
     </ion-card-content>
-    
-    
   </ion-card>
-
 </ion-content>
-
-<!--
-  Docs
-  https://ionicframework.com/docs/angular/navigation
--->
-
-
