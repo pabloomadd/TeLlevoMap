@@ -1,0 +1,15 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="user"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Cuenta</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-card>
+    <h2>{{this.user?.name}} {{this.user?.lastname}}</h2>
+    <h5>{{this.user?.email}}</h5>
+  </ion-card>
+</ion-content>

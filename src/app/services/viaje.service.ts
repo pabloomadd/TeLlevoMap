@@ -15,7 +15,8 @@ export class ViajeService {
     this.supabase = createClient(environment.SupaUrl, environment.SupaK);
   }
 
-  // CRUD Supa Viajes
+// CRUD Viajes
+  // Obtener Todos Viajes
   getTrips(): Observable<IViaje[]> {
     return new Observable((observer) => {
       this.supabase

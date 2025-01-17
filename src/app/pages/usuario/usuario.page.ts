@@ -4,14 +4,14 @@ import { UserService } from '../../services/user.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ViajeService } from '../../services/viaje.service';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-usuario',
   templateUrl: 'usuario.page.html',
   styleUrls: ['usuario.page.css'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule],
+  imports: [IonicModule, CommonModule, FormsModule, RouterModule],
   providers: [ViajeService, UserService],
 })
 export class UsuarioPage implements OnInit {

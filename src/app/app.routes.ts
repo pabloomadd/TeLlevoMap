@@ -31,5 +31,17 @@ export const routes: Routes = [
       import('./pages/trip/trip.page').then((m) => m.TripPage),
     canActivate: [authGuard],
   },
-  { path: '**', redirectTo: 'login', pathMatch: 'full' },
+  {
+    path: 'perfil',
+    loadComponent: () =>
+      import('./pages/perfil/perfil.page').then((m) => m.PerfilPage),
+    canActivate: [authGuard],
+  },
+  {
+    path: 'config',
+    loadComponent: () =>
+      import('./pages/config/config.page').then((m) => m.ConfigPage),
+    canActivate: [authGuard],
+  },
+  { path: '**', redirectTo: 'perfil', pathMatch: 'full' },
 ];

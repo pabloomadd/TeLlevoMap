@@ -81,4 +81,26 @@ export class UserService {
         });
     });
   }
+
+  getUsrSession() {
+    return this.supabase.auth.getUser();
+  }
+
+  getUserData(email: string): Observable<IUser> {
+    return new Observable((observer) => {
+      this.supabase
+        .from('user')
+        .select('*')
+        .eq('email', email)
+        .single()
+        .then(({ data, error }) => {
+          if (error) {
+            observer.error(error);
+          } else {
+            observer.next(data || []);
+          }
+          observer.complete();
+        });
+    });
+  }
 }
