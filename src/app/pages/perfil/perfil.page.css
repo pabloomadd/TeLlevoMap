@@ -1,3 +1,25 @@
-ion-card {
-  padding-left: 20px;
+ion-content{
+  --padding-bottom: 80px;
+}
+
+ion-card{
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+}
+
+ion-button {
+  padding-top: 6px;
+}
+
+.saveBtn{
+  margin-top: 10px;
+  margin-left: 30%;
+}
+
+ion-text h4{
+  margin-left: 15px;
+}
+
+ion-input {
+  border-bottom: 1px solid gray;
 }

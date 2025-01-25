@@ -9,7 +9,159 @@
 
 <ion-content [fullscreen]="true">
   <ion-card>
-    <h2>{{this.user?.name}} {{this.user?.lastname}}</h2>
-    <h5>{{this.user?.email}}</h5>
+    <ion-row>
+      <ion-col size="10">
+        <ion-text color="primary">
+          <h4>Información Personal</h4>
+        </ion-text>
+      </ion-col>
+      <ion-col size="2">
+        @if (!this.isEditPInfo) {
+        <ion-button (click)="editPerInfo()" size="small">
+          <ion-icon
+            slot="icon-only"
+            src="assets/icons/edit.svg"
+            width="3px"
+            height="3px"
+          ></ion-icon>
+        </ion-button>
+        } @else if (this.isEditPInfo) {
+        <ion-button (click)="cancelPerEdit()" size="small">
+          <ion-icon
+            slot="icon-only"
+            src="assets/icons/x.svg"
+            width="3px"
+            height="3px"
+          ></ion-icon>
+        </ion-button>
+        }
+      </ion-col>
+    </ion-row>
+
+    <ion-card-content>
+      <form [formGroup]="personalForm" (submit)="updatePerInfo()">
+        <ion-item>
+          <ion-input
+            formControlName="name"
+            label="Nombre"
+            labelPlacement="stacked"
+          ></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input
+            formControlName="lastname"
+            label="Apellido"
+            labelPlacement="stacked"
+          ></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input
+            formControlName="email"
+            label="Correo Electrónico"
+            labelPlacement="stacked"
+          ></ion-input>
+        </ion-item>
+        @if (isEditPInfo) {
+        <ion-button
+          class="saveBtn"
+          block
+          color="primary"
+          type="submit"
+          [disabled]="personalForm.invalid || !isEditPInfo"
+          >Guardar
+        </ion-button>
+        }
+      </form>
+    </ion-card-content>
   </ion-card>
+  @if (isDriver) {
+
+  <ion-card>
+    <ion-row>
+      <ion-col size="10">
+        <ion-text color="primary">
+          <h4>Información del Vehículo</h4>
+        </ion-text>
+      </ion-col>
+      <ion-col size="2">
+        @if (!this.isEditVehInfo) {
+        <ion-button (click)="editVehInfo()" size="small">
+          <ion-icon
+            slot="icon-only"
+            src="assets/icons/edit.svg"
+            width="3px"
+            height="3px"
+          ></ion-icon>
+        </ion-button>
+        } @else if (this.isEditVehInfo) {
+        <ion-button (click)="cancelVehEdit()" size="small">
+          <ion-icon
+            slot="icon-only"
+            src="assets/icons/x.svg"
+            width="3px"
+            height="3px"
+          ></ion-icon>
+        </ion-button>
+        }
+      </ion-col>
+    </ion-row>
+
+    <ion-card-content>
+      <form [formGroup]="vehicleForm" (submit)="updateVehInfo()">
+        <ion-item>
+          <ion-input
+            formControlName="brand"
+            label="Marca"
+            labelPlacement="stacked"
+          ></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input
+            formControlName="model"
+            label="Modelo"
+            labelPlacement="stacked"
+          ></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input
+            formControlName="licPlate"
+            label="Nro. Patente"
+            labelPlacement="stacked"
+          ></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input
+            formControlName="year"
+            label="Año"
+            labelPlacement="stacked"
+          ></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input
+            formControlName="color"
+            label="Color"
+            labelPlacement="stacked"
+          ></ion-input>
+        </ion-item>
+        @if (isEditVehInfo) {
+        <ion-button
+          class="saveBtn"
+          block
+          color="primary"
+          type="submit"
+          [disabled]="personalForm.invalid"
+        >
+          Guardar
+        </ion-button>
+        }
+      </form>
+    </ion-card-content>
+  </ion-card>
+  }
+
+  <ion-toast
+    [isOpen]="isToastOpen"
+    [message]="msg"
+    [duration]="4000"
+  ></ion-toast>
 </ion-content>

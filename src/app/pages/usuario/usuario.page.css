@@ -1,3 +1,7 @@
-.configList{
-  margin-top: 20px;
+.configList {
+  margin-top: 60%;
+}
+
+ion-button {
+  border-radius: 20px;
 }

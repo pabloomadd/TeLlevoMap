@@ -9,7 +9,7 @@ export interface IUser {
 
 export interface Vehicle {
   id: number;
-  brend: string;
+  brand: string;
   model: string;
   year: string;
   licPlate: string;

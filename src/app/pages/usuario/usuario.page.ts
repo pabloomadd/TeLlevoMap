@@ -29,7 +29,7 @@ export class UsuarioPage implements OnInit {
   logOut() {
     console.log('Cerrando Sesión...');
     this._userService.logOut();
-    localStorage.clear(); //Limpeiza de localStorage
+    localStorage.clear(); //Limpieza de localStorage
     window.location.reload(); //Fuerza la recarga
   }
 }
