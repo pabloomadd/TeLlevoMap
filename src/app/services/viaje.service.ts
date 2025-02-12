@@ -3,6 +3,8 @@ import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { Observable } from 'rxjs';
 import { ILocation, IViaje } from 'src/app/models/IViaje';
 import { environment } from 'src/environments/environment.development';
+import { MapboxDirectionsResponse } from '../models/IDirection';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -10,12 +12,15 @@ import { environment } from 'src/environments/environment.development';
 export class ViajeService {
   private supabase: SupabaseClient;
 
+  private urlDirections = 'https://api.mapbox.com/directions/v5/mapbox/driving';
+  private mapTk = environment.map;
+
   // Supabase Client
-  constructor() {
+  constructor(private http: HttpClient) {
     this.supabase = createClient(environment.SupaUrl, environment.SupaK);
   }
 
-// CRUD Viajes
+  // CRUD Viajes
   // Obtener Todos Viajes
   getTrips(): Observable<IViaje[]> {
     return new Observable((observer) => {
@@ -23,8 +28,8 @@ export class ViajeService {
         .from('trip')
         .select(
           `*,
-          start(name),
-          end(name)`
+          start(*),
+          end(*)`
         )
         .then(({ data, error }) => {
           if (error) {
@@ -37,16 +42,20 @@ export class ViajeService {
     });
   }
 
-  postTrip(viaje: {
-    nombre: string;
-    seat1: boolean;
-    seat2: boolean;
-    seat3: boolean;
-    seat4: boolean;
-    start: string;
-    end: string;
-    driver: string;
-  }): Observable<IViaje[]> {
+  getTripDirections(
+    initLon: number,
+    initLat: number,
+    endLon: number,
+    endLat: number
+  ): Observable<MapboxDirectionsResponse> {
+    const url = `${this.urlDirections}/${initLon},${initLat};${endLon},${endLat}?geometries=geojson&access_token=${environment.map}`;
+
+    console.log('URL Generada: ', url);
+
+    return this.http.get<MapboxDirectionsResponse>(url);
+  }
+
+  postTrip(viaje: IViaje): Observable<IViaje[]> {
     return new Observable((observer) => {
       this.supabase
         .from('trip')

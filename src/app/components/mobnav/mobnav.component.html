@@ -1,29 +1,16 @@
-<nav>
-  <ion-button
-    color="medium"
-    size="small"
-    [routerLink]="'/mapview'"
-    fill="clear"
-    shape="round"
-  >
-    <ion-img src="assets/icons/map.svg"></ion-img>
-  </ion-button>
-  <ion-button
-    color="medium"
-    size="small"
-    [routerLink]="'/trip'"
-    fill="clear"
-    shape="round"
-  >
-    <ion-img src="assets/icons/car.svg"></ion-img>
-  </ion-button>
-  <ion-button
-    color="medium"
-    size="small"
-    [routerLink]="'/user'"
-    fill="clear"
-    shape="round"
-  >
-    <ion-img src="assets/icons/person.svg"></ion-img>
-  </ion-button>
-</nav>
+<ion-tabs>
+  <ion-tab-bar slot="bottom">
+    <ion-tab-button [routerLink]="'/mapview'">
+      <ion-icon src="assets/icons/map.svg"></ion-icon>
+      Mapa
+    </ion-tab-button>
+    <ion-tab-button [routerLink]="'/trip'">
+      <ion-icon src="assets/icons/car.svg"></ion-icon>
+      Viajes
+    </ion-tab-button>
+    <ion-tab-button [routerLink]="'/user'">
+      <ion-icon src="assets/icons/person.svg"></ion-icon>
+      Cuenta
+    </ion-tab-button>
+  </ion-tab-bar>
+</ion-tabs>

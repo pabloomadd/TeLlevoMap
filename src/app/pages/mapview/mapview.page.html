@@ -1,19 +1,139 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title class="ion-text-center">Mapa</ion-title>
-  </ion-toolbar>
-</ion-header>
+<div class="map-container">
+  <mgl-map
+    [style]="'mapbox://styles/mapbox/streets-v12'"
+    [zoom]="[15.5]"
+    [center]="centro"
+    [pitch]="[45]"
+    [bearing]="[-17.6]"
+    (mapLoad)="onLoad($event.target)"
+  >
+    <mgl-layer
+      id="3d-buildings"
+      source="composite"
+      sourceLayer="building"
+      [filter]="['==', 'extrude', 'true']"
+      type="fill-extrusion"
+      [minzoom]="15"
+      [paint]="{
+      'fill-extrusion-color': '#aaa',
+      'fill-extrusion-height': [
+        'interpolate',
+        ['linear'],
+        ['zoom'],
+        15,
+        0,
+        15.05,
+        ['get', 'height']
+      ],
+      'fill-extrusion-base': [
+        'interpolate',
+        ['linear'],
+        ['zoom'],
+        15,
+        0,
+        15.05,
+        ['get', 'min_height']
+      ],
+      'fill-extrusion-opacity': 0.6
+    }"
+      [before]="labelLayerId"
+    ></mgl-layer>
 
-<ion-content [fullscreen]="true">
+    <!-- GPS Marker -->
+    @if (gps) {
+    <mgl-marker [lngLat]="gps">
+      <ion-img src="assets/icons/gps.svg" class="gpsMarker"></ion-img>
+    </mgl-marker>
+    }
 
-  <div id="map"></div>
+    <!-- Init&End Marker -->
+    @if (inicio) {
+    <mgl-marker [lngLat]="inicio">
+      <ion-img src="assets/icons/geo.svg" class="initMarker"></ion-img>
+    </mgl-marker>
+    } @if (destino) {
+    <mgl-marker [lngLat]="destino">
+      <ion-img src="assets/icons/geo.svg" class="endMarker"></ion-img>
+    </mgl-marker>
+    } @if (routeSource) {
+    <mgl-layer
+      [id]="'routerLayer'"
+      [type]="'line'"
+      [source]="routeSource"
+      [paint]="routePaint"
+    >
+    </mgl-layer>
+    }
+  </mgl-map>
 
-  <div class="routeControl">
-    <ion-button>
-      Ruta
-    </ion-button>
+  <ion-button class="gpsBtn" shape="round" (click)="getGPS()">
+    <ion-icon slot="icon-only" src="assets/icons/crosshair.svg"></ion-icon>
+  </ion-button>
 
-  </div>
+  <ion-card class="main">
+    <ion-card-header>
+      <ion-card-title>Viajes</ion-card-title>
+    </ion-card-header>
 
+    @if(isViajeActivo){
+    <ion-card class="viajeCard">
+      <ion-card-subtitle>Viaje Activo</ion-card-subtitle>
 
-</ion-content>
+      <ion-card-content>
+        <ion-row>
+          <ion-col size="8">
+            <h6>Nombre: Viaje de Malitos</h6>
+            <p>Desde:Viña</p>
+            <p>Hasta:Valparaiso</p>
+          </ion-col>
+          <ion-col size="4">
+            <ion-button>
+              <ion-icon src="assets/icons/search.svg"></ion-icon>
+            </ion-button>
+            <ion-button>
+              <ion-icon src="assets/icons/search.svg"></ion-icon>
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-card-content>
+    </ion-card>
+    }@else {
+    <ion-content class="tripScroll">
+      @for (viaje of viajes; track $index){
+      <ion-card
+        class="viajeCard"
+        [ngClass]="{'selectedCard':selectedTripId === $index}"
+      >
+        <ion-row>
+          <ion-col size="8">
+            <h6 class="tripTitle">{{viaje.nombre}}</h6>
+
+            <p class="txtWIcon">
+              <ion-img class="txtIco initMarker" src="assets/icons/geo.svg" ></ion-img>
+              Desde: {{viaje.start.name}}
+            </p>
+
+            <p class="txtWIcon">
+              <ion-img class="txtIco endMarker" src="assets/icons/geo.svg"></ion-img>
+              Hasta: {{viaje.end.name}}
+            </p>
+          </ion-col>
+          <ion-col size="4" class="ion-margin-top">
+            <ion-button
+              color="tertiary"
+              (click)="viewRouteBtn(viaje.start.longitude, viaje.start.latitude, viaje.end.longitude, viaje.end.latitude, $index)"
+            >
+              <ion-icon src="assets/icons/search.svg"></ion-icon>
+            </ion-button>
+            <ion-button color="success">
+              <ion-icon src="assets/icons/join.svg"></ion-icon>
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-card>
+
+      }
+    </ion-content>
+    }
+  </ion-card>
+</div>

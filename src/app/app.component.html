@@ -1,6 +1,6 @@
 <ion-app>
   <ion-router-outlet></ion-router-outlet>
-  @if (isAuth) {
+  @if (!isAuth) {
   <app-mobnav></app-mobnav>
   }
 </ion-app>

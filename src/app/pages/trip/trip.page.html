@@ -1,6 +1,6 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title class="ion-text-center">Mis Viajes</ion-title>
+    <ion-title class="ion-text-center">Historial de Viajes</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -28,44 +28,67 @@
               <ion-label position="stacked">Nombre del Viaje:</ion-label>
               <ion-input
                 [ngClass]="{'invalid': formValidError('nombre', 'required') || formValidError('nombre', 'minlength')}"
-                type="text" formControlName="nombre"
-
+                type="text"
+                formControlName="nombre"
               ></ion-input>
-                @if (formValidError('nombre', 'required')) {
-                  <ion-text color="danger">
-                    <p class="dangerTxt">*Nombre es requerido</p>
-                  </ion-text>
-                }
-                @if (formValidError('nombre', 'minlength')) {
-                  <ion-text color="danger">
-                    <p class="dangerTxt">*Nombre debe contener al menos 6 carácteres</p>
-                  </ion-text>
-                }
-
+              @if (formValidError('nombre', 'required')) {
+              <ion-text color="danger">
+                <p class="dangerTxt">*Nombre es requerido</p>
+              </ion-text>
+              } @if (formValidError('nombre', 'minlength')) {
+              <ion-text color="danger">
+                <p class="dangerTxt">
+                  *Nombre debe contener al menos 6 carácteres
+                </p>
+              </ion-text>
+              }
             </ion-item>
 
             <!-- Lista de Lugares -->
             <ion-item>
-              <ion-select label="Inicio:" labelPlacement="stacked" formControlName="start">
+              <ion-select
+                label="Inicio:"
+                labelPlacement="stacked"
+                formControlName="start"
+              >
                 @for (ubi of ubis; track $index) {
-                <ion-select-option [value]="ubi.id">{{ubi.name}}</ion-select-option>
+                <ion-select-option [value]="ubi.id"
+                  >{{ubi.name}}</ion-select-option
+                >
                 }
               </ion-select>
             </ion-item>
             <ion-item>
-              <ion-select label="Destino:" labelPlacement="stacked" formControlName="end">
+              <ion-select
+                label="Destino:"
+                labelPlacement="stacked"
+                formControlName="end"
+              >
                 @for (ubi of ubis; track $index) {
-                  <ion-select-option [value]="ubi.id">{{ubi.name}}</ion-select-option>
-                  }
+                <ion-select-option [value]="ubi.id"
+                  >{{ubi.name}}</ion-select-option
+                >
+                }
               </ion-select>
             </ion-item>
 
             <ion-item>
               <ion-label position="stacked">Conductor:</ion-label>
-              <ion-input type="text" formControlName="driver" [placeholder]="iDriver" [value]="iDriver" readonly></ion-input>
+              <ion-input
+                type="text"
+                formControlName="driver"
+                [placeholder]="iDriver"
+                [value]="iDriver"
+                readonly
+              ></ion-input>
             </ion-item>
             <div class="creaBtn ion-text-center">
-              <ion-button block color="primary" type="submit" [disabled]="!tripForm.valid">
+              <ion-button
+                block
+                color="primary"
+                type="submit"
+                [disabled]="!tripForm.valid"
+              >
                 Crear Viaje
               </ion-button>
             </div>
@@ -76,29 +99,7 @@
   </div>
   }
 
-  <!-- Viaje Activo -->
-  @if (viajeActivo) {
-  <div class="ion-text-center">
-    <p>Tienes un Viaje Activo</p>
-  </div>
-
-  }
-
-  <!-- Vista de Todos los Viajes -->
-  <div class="trips">
-    <ion-grid class="ion-text-center">
-      <ion-row class="titulos">
-        <ion-col>Nombre</ion-col>
-        <ion-col>Inicio</ion-col>
-        <ion-col>Destino</ion-col>
-      </ion-row>
-      @for (viaje of viajes; track $index){
-      <ion-row class="tripInfo">
-        <ion-col>{{ viaje.nombre }}</ion-col>
-        <ion-col>{{ viaje.start.name }}</ion-col>
-        <ion-col>{{ viaje.end.name }}</ion-col>
-      </ion-row>
-      }
-    </ion-grid>
-  </div>
+  <ion-text color="medium">
+    <p>Aún no te has unido a un Viaje</p>
+  </ion-text>
 </ion-content>

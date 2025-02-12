@@ -76,27 +76,27 @@ export class TripPage implements OnInit {
 
   // Viaje de Prueba
 
-
   constructor(private formBuilder: FormBuilder) {
     this.tripForm = this.formBuilder.group({
       nombre: ['', [Validators.required, Validators.minLength(6)]],
-      seat1: [false, Validators.required],
-      seat2: [false, Validators.required],
-      seat3: [false, Validators.required],
-      seat4: [false, Validators.required],
+      seat1: [null],
+      seat2: [null],
+      seat3: [null],
+      seat4: [null],
       start: ['', Validators.required],
       end: ['', Validators.required],
       driver: [this.iDriver, Validators.required],
-      state: [true, Validators.required]
+      state: [true, Validators.required],
     });
   }
 
   ngOnInit() {
-    this.loadTrips();
+    // this.loadTrips();
     this.loadLocations();
   }
 
   // Suscripcion a GetTrips
+  // Correccion: Obtener historial de Trips
   private loadTrips(): void {
     this.viajeSub = this._ViajeService.getTrips().subscribe({
       next: (data) => (this.viajes = data),
