@@ -109,27 +109,114 @@
             <h6 class="tripTitle">{{viaje.nombre}}</h6>
 
             <p class="txtWIcon">
-              <ion-img class="txtIco initMarker" src="assets/icons/geo.svg" ></ion-img>
+              <ion-img
+                class="txtIco initMarker"
+                src="assets/icons/geo.svg"
+              ></ion-img>
               Desde: {{viaje.start.name}}
             </p>
 
             <p class="txtWIcon">
-              <ion-img class="txtIco endMarker" src="assets/icons/geo.svg"></ion-img>
+              <ion-img
+                class="txtIco endMarker"
+                src="assets/icons/geo.svg"
+              ></ion-img>
               Hasta: {{viaje.end.name}}
             </p>
           </ion-col>
           <ion-col size="4" class="ion-margin-top">
+            <!-- Boton ViewRoute -->
             <ion-button
               color="tertiary"
               (click)="viewRouteBtn(viaje.start.longitude, viaje.start.latitude, viaje.end.longitude, viaje.end.latitude, $index)"
             >
               <ion-icon src="assets/icons/search.svg"></ion-icon>
             </ion-button>
-            <ion-button color="success">
+
+            <!-- Boton Unirse -->
+            <ion-button color="success" id="tripModal{{$index}}">
               <ion-icon src="assets/icons/join.svg"></ion-icon>
             </ion-button>
           </ion-col>
         </ion-row>
+
+        <ion-modal #modal trigger="tripModal{{$index}}">
+          <ng-template>
+            <ion-header>
+              <ion-toolbar>
+                <ion-title>Detalles del Viaje</ion-title>
+                <ion-buttons slot="end">
+                  <ion-button (click)="modal.dismiss()"> Cerrar </ion-button>
+                </ion-buttons>
+              </ion-toolbar>
+            </ion-header>
+            <ion-content>
+              <!-- Info Viaje -->
+              <div class="seatContainer">
+                <!-- Fondo CarRef -->
+                <ion-img src="assets/imgs/cartop.png" class="seatRef"></ion-img>
+
+                <ion-card class="tripDetCard">
+                  <p>
+                    <span><ion-text color="medium">Nombre:</ion-text></span>
+                    {{viaje.nombre}}
+                  </p>
+                  <p>
+                    <span><ion-text color="medium">Desde:</ion-text></span>
+                    {{viaje.start.name}}
+                  </p>
+                  <p>
+                    <span><ion-text color="medium">Hasta:</ion-text></span>
+                    {{viaje.end.name}}
+                  </p>
+                  <p>
+                    <span><ion-text color="medium">Conductor:</ion-text></span>
+                    {{viaje.driver}}
+                  </p>
+                </ion-card>
+
+                <!-- Asientos -->
+                <div class="seatContent">
+                  <h6>- Asientos -</h6>
+                  <ion-text color="medium">
+                    <p>Seleccione uno para unirse al viaje</p>
+                  </ion-text>
+                  <div class="seatBtn">
+                    <ion-row>
+                      <ion-col size="12">
+                        <ion-button
+                          shape="round"
+                          disabled="true"
+                          class="ion-padding"
+                        >
+                          Conductor
+                        </ion-button>
+                        <ion-button class="ion-padding" color="tertiary" (click)="joinToTrip(viaje.id,1,user.id)" [disabled]='viaje.seat1'>
+                          1
+                        </ion-button>
+                      </ion-col>
+                    </ion-row>
+                  </div>
+                  <div class="seatBtn">
+                    <ion-row>
+                      <ion-col size="12">
+                        <ion-button class="ion-padding" color="tertiary" (click)="joinToTrip(viaje.id,2,user.id)"  [disabled]="viaje.seat2">
+                          2
+                        </ion-button>
+                        <ion-button class="ion-padding" color="tertiary" (click)="joinToTrip(viaje.id,3,user.id)"  [disabled]="viaje.seat3">
+                          3
+                        </ion-button>
+                        <ion-button class="ion-padding" color="tertiary" (click)="joinToTrip(viaje.id,4,user.id)"  [disabled]="viaje.seat4">
+                          4
+                        </ion-button>
+                      </ion-col>
+                    </ion-row>
+                  </div>
+                </div>
+              </div>
+            </ion-content>
+          </ng-template>
+        </ion-modal>
       </ion-card>
 
       }

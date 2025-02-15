@@ -7,6 +7,7 @@ import { environment } from 'src/environments/environment.development';
 import { Geolocation } from '@capacitor/geolocation';
 import {
   IonButton,
+  IonButtons,
   IonCard,
   IonCardContent,
   IonCardHeader,
@@ -14,9 +15,14 @@ import {
   IonCardTitle,
   IonCol,
   IonContent,
+  IonHeader,
   IonIcon,
   IonImg,
+  IonModal,
   IonRow,
+  IonText,
+  IonTitle,
+  IonToolbar,
 } from '@ionic/angular/standalone';
 import { IViaje } from 'src/app/models/IViaje';
 import { Subscription } from 'rxjs';
@@ -26,6 +32,8 @@ import { GeoJsonFeatureCollection } from 'src/app/models/IGeoJson';
 import { Map as MapboxMap } from 'mapbox-gl';
 import * as mapboxgl from 'mapbox-gl';
 import { Feature, LineString } from 'geojson';
+import { UserService } from 'src/app/services/user.service';
+import { IUser } from 'src/app/models/IUser';
 
 @Component({
   selector: 'app-mapview',
@@ -37,19 +45,24 @@ import { Feature, LineString } from 'geojson';
     FormsModule,
     NgxMapboxGLModule,
     IonContent,
-
     IonImg,
     IonCard,
     IonCardHeader,
     IonCardContent,
     IonCardTitle,
     IonCardSubtitle,
+    IonModal,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonText,
+    IonButtons,
     IonRow,
     IonCol,
     IonButton,
     IonIcon,
   ],
-  providers: [{ provide: MAPBOX_API_KEY, useValue: environment.map }],
+  providers: [{ provide: MAPBOX_API_KEY, useValue: '' }],
 })
 export class MapviewPage implements OnInit {
   @ViewChild('map') mapRef: any;
@@ -57,20 +70,26 @@ export class MapviewPage implements OnInit {
 
   // Services
   private _ViajeService = inject(ViajeService);
+  private _userService = inject(UserService);
 
-  viajes: IViaje[] = [];
-
-// Variables
-
+  // Variables
   labelLayerId?: string;
   routeGeoJson!: GeoJsonFeatureCollection;
   selectedTripId!: number;
-  
+
+  // Lista Viajes
+  viajes: IViaje[] = [];
+
   // Location Vars
   centro!: LngLatLike;
   gps!: LngLatLike;
   inicio!: LngLatLike;
   destino!: LngLatLike;
+
+  // User Vars
+  user!: IUser;
+  userMail?: string;
+  private userSub!: Subscription;
 
   routeSource: any;
   routePaint: any;
@@ -87,6 +106,9 @@ export class MapviewPage implements OnInit {
     console.log('Mapa');
     this.getGPS();
     this.loadTrips();
+    this.getUser();
+
+    // Hacer consulta a Trips para traer el viaje al que esta enl user siempre que este Trip siga activo
   }
 
   onLoad(mapInstance: Map) {
@@ -242,5 +264,44 @@ export class MapviewPage implements OnInit {
 
   toggleCard() {
     this.openCard = !this.openCard;
+  }
+
+  joinToTrip(tripId: number, seatNumber: number, userId: number) {
+    this._ViajeService.updateTrip(tripId, seatNumber, userId);
+  }
+
+  async getUser() {
+    // Obtenr Sesión
+    try {
+      const { data, error } = await this._userService.getUsrSession();
+
+      if (error) {
+        console.log('Error al Obtener Sesión: ', error);
+        return;
+      }
+
+      if (data?.user) {
+        this.userMail = data.user.email;
+        console.log('Email Obtenido: ', this.userMail);
+
+        if (this.userMail) {
+          this.userSub = this._userService
+            .getUserData(this.userMail)
+            .subscribe({
+              next: (data) => {
+                this.user = data;
+                console.log('User ID: ', this.user.id);
+              },
+
+              error: (error) =>
+                console.log('Error Obteniendo UserData: ', error),
+            });
+        }
+      } else {
+        console.log('No hay Usuario Autenticado');
+      }
+    } catch (error) {
+      console.log('Algo salio mal: ', error);
+    }
   }
 }

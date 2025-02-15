@@ -71,6 +71,29 @@ export class ViajeService {
     });
   }
 
+  async updateTrip(
+    tripId: number,
+    seatNumber: number,
+    userId: number
+  ): Promise<any> {
+    try {
+      const seatField = `seat${seatNumber}`;
+
+      const { data, error } = await this.supabase
+        .from('trip')
+        .update({ [seatField]: userId })
+        .eq('id', tripId);
+
+      if (error) {
+        console.log(`Error al Actualizar Viaje de Id: ${tripId}, ${error}`);
+        throw error;
+      }
+    } catch (err) {
+      console.error('Error inesperado al Actualizar Viaje: ', err);
+      throw err;
+    }
+  }
+
   // Supa Locations
   getLocations(): Observable<ILocation[]> {
     return new Observable((observer) => {
