@@ -12,8 +12,8 @@ mgl-map {
 .gpsBtn {
   position: absolute;
   bottom: 0px;
-  margin-bottom: 230px;
-  margin-left: 150px;
+  margin-bottom: 28vh;
+  margin-left: 37vw;
   padding-bottom: 150px;
   z-index: 3;
 }
@@ -64,6 +64,7 @@ mgl-map {
 
 .viajeCard {
   border: 1px solid gray;
+  color: white;
 }
 
 .selectedCard {
@@ -88,7 +89,7 @@ mgl-map {
   text-align: center;
 }
 
-.tripDetCard{
+.tripDetCard {
   margin-top: 30px;
   padding: 20px;
   color: white;

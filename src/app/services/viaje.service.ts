@@ -94,6 +94,25 @@ export class ViajeService {
     }
   }
 
+  async cancelTrip(tripId: number, seatNumber: number) {
+    try {
+      const seatField = `seat${seatNumber}`;
+
+      const { data, error } = await this.supabase
+        .from('trip')
+        .update({ [seatField]: null })
+        .eq('id', tripId);
+
+      if (error) {
+        console.log('Error al borrar UserId en ', seatField);
+        throw error;
+      }
+    } catch (err) {
+      console.error('Error Inesperado al Borrar UserId de Trip');
+      throw err;
+    }
+  }
+
   // Supa Locations
   getLocations(): Observable<ILocation[]> {
     return new Observable((observer) => {

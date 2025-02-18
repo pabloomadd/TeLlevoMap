@@ -1,3 +1,5 @@
+import { IViaje } from "./IViaje";
+
 export interface IUser {
   id: number;
   name: string;
@@ -5,6 +7,7 @@ export interface IUser {
   email: string;
   vehicle: Vehicle;
   usrType: string;
+  activeTrip: IViaje;
 }
 
 export interface Vehicle {
