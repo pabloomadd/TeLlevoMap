@@ -64,7 +64,7 @@ import { IUser } from 'src/app/models/IUser';
     IonActionSheet,
     IonToast,
   ],
-  providers: [{ provide: MAPBOX_API_KEY, useValue: '' }],
+  providers: [{ provide: MAPBOX_API_KEY, useValue: environment.map }],
 })
 export class MapviewPage implements OnInit {
   @ViewChild('map') mapRef: any;
@@ -90,12 +90,18 @@ export class MapviewPage implements OnInit {
   inicio!: LngLatLike;
   destino!: LngLatLike;
 
+  // MeetPoint Vars
+  meetPoint!: [number, number] | undefined;
+  isMeetPoint: boolean = false;
+  usingMeetMarker: boolean = false;
+
   // User Vars
   user!: IUser;
   userMail?: string;
   private userSub!: Subscription;
   viajeActivo!: IViaje;
   activeTripFound!: boolean;
+  currentSeat!: number;
 
   routeSource: any;
   routePaint: any;
@@ -152,6 +158,31 @@ export class MapviewPage implements OnInit {
     this.map.on('load', () => {
       console.log('Mapa Cargado Correctamente');
     });
+  }
+
+  onMapClick(
+    event: mapboxgl.MapMouseEvent & {
+      features?: mapboxgl.MapboxGeoJSONFeature[];
+      lngLat: mapboxgl.LngLat;
+    }
+  ) {
+    if (this.usingMeetMarker) {
+      this.meetPoint = [event.lngLat.lng, event.lngLat.lat];
+      this.usingMeetMarker = false;
+      this.isMeetPoint = true;
+      console.log('Meet Marker Deshabilitado');
+
+      console.log('Punto de Encuentro: ', this.meetPoint);
+
+      this._ViajeService
+        .setSeatLocation(this.viajeActivo.id, this.currentSeat, this.meetPoint)
+        .then((data) => {
+          console.log('Ubicacion del Asiento Guardada');
+        })
+        .catch((error) => {
+          console.error('Error al Guardar la Ubicacion del Asiento: ', error);
+        });
+    }
   }
 
   getLabelLayerId(layers: AnyLayer[]) {
@@ -234,30 +265,31 @@ export class MapviewPage implements OnInit {
       geometry: resp.routes[0].geometry as LineString,
     };
 
-    const routeSource = this.map.getSource('route') as mapboxgl.GeoJSONSource;
+    const existSource = this.map.getSource('route') as mapboxgl.GeoJSONSource;
 
-    if (routeSource) {
-      routeSource.setData(newRouteData);
+    if (existSource) {
+      existSource.setData(newRouteData);
     } else {
-      // Si no existe, la agregamos
       this.map.addSource('route', {
         type: 'geojson',
         data: newRouteData,
       });
 
-      this.map.addLayer({
-        id: 'route-layer',
-        type: 'line',
-        source: 'route',
-        layout: {
-          'line-join': 'round',
-          'line-cap': 'round',
-        },
-        paint: {
-          'line-color': '#2E82C3',
-          'line-width': 7,
-        },
-      });
+      if (!this.map.getLayer('route-Layer')) {
+        this.map.addLayer({
+          id: 'route-layer',
+          type: 'line',
+          source: 'route',
+          layout: {
+            'line-join': 'round',
+            'line-cap': 'round',
+          },
+          paint: {
+            'line-color': '#2E82C3',
+            'line-width': 7,
+          },
+        });
+      }
     }
   }
 
@@ -304,6 +336,27 @@ export class MapviewPage implements OnInit {
     console.log('Id del Vieja: ', this.viajeActivo?.id);
   }
 
+  getSeatLocation(tripId: number, seatNumber: number) {
+    this._ViajeService.getSeatLocation(tripId, seatNumber).subscribe({
+      next: (data) => {
+        console.log('Ubicacion del Asiento: ', data);
+
+        const seatField = `seat${seatNumber}Loc`;
+
+        const asiento = data[0][seatField];
+        console.log('Dato 0: ', asiento[0]);
+        console.log('Dato 1: ', asiento[1]);
+
+        // Asignación del Punto de Encuentro
+        this.isMeetPoint = true;
+        this.meetPoint = [asiento[0], asiento[1]];
+      },
+      error: (err) => {
+        console.error('Error al Obtener Ubicacion del Asiento: ', err);
+      },
+    });
+  }
+
   joinToTrip(tripId: number, seatNumber: number, userId: number) {
     try {
       // Agregar en el Trip Table
@@ -333,6 +386,18 @@ export class MapviewPage implements OnInit {
       // Borrado de User Table
       this._userService.deleteTripFromUser(this.user.id);
       console.log('Eliminado de User Table');
+
+      // Borrado de SeatLocation
+      this._ViajeService.deleteSeatLocation(
+        this.viajeActivo.id,
+        this.currentSeat
+      );
+      console.log('Borrado el SeatLocation');
+
+
+      // Reinicio de Vars
+      this.isMeetPoint = false;
+      this.meetPoint = undefined;
 
       this.toastMsg('Haz salido del Viaje', true);
     } catch (error) {
@@ -366,6 +431,9 @@ export class MapviewPage implements OnInit {
                 if (this.viajeActivo !== null) {
                   this.activeTripFound = true;
                   this.checkUsrSeat();
+
+                  // Obtención de Ubi del Asiento
+                  this.getSeatLocation(this.viajeActivo.id, this.currentSeat);
                 } else if (this.viajeActivo === null) {
                   this.activeTripFound = false;
                 }
@@ -390,15 +458,19 @@ export class MapviewPage implements OnInit {
     if (this.viajeActivo) {
       if (this.viajeActivo.seat1 === this.user.id) {
         this.activeSeat1 = true;
+        this.currentSeat = 1;
         console.log('User esta en el Asiento 1');
       } else if (this.viajeActivo.seat2 === this.user.id) {
         this.activeSeat2 = true;
+        this.currentSeat = 2;
         console.log('User esta en el Asiento 2');
       } else if (this.viajeActivo.seat3 === this.user.id) {
         this.activeSeat3 = true;
+        this.currentSeat = 3;
         console.log('User esta en el Asiento 3');
       } else if (this.viajeActivo.seat4 === this.user.id) {
         this.activeSeat4 = true;
+        this.currentSeat = 4;
         console.log('User esta en el Asiento 4');
       }
     }
@@ -442,5 +514,11 @@ export class MapviewPage implements OnInit {
     setTimeout(() => {
       this.isToastOpen = toast;
     }, 100);
+  }
+
+  enableMeetMarker() {
+    this.usingMeetMarker = true;
+    this.toastMsg('Selecciona un Punto de Encuentro en el Mapa', true);
+    console.log('Meet Marker Habilitado');
   }
 }

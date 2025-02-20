@@ -6,6 +6,7 @@
     [pitch]="[45]"
     [bearing]="[-17.6]"
     (mapLoad)="onLoad($event.target)"
+    (mapClick)="onMapClick($event)"
   >
     <mgl-layer
       id="3d-buildings"
@@ -42,7 +43,7 @@
     <!-- GPS Marker -->
     @if (gps) {
     <mgl-marker [lngLat]="gps">
-      <ion-img src="assets/icons/gps.svg" class="gpsMarker"></ion-img>
+      <ion-img class="gpsMarker"></ion-img>
     </mgl-marker>
     }
 
@@ -54,6 +55,10 @@
     } @if (destino) {
     <mgl-marker [lngLat]="destino">
       <ion-img src="assets/icons/geo.svg" class="endMarker"></ion-img>
+    </mgl-marker>
+    } @if(isMeetPoint){
+    <mgl-marker [lngLat]="meetPoint">
+      <ion-img src="assets/icons/meet.svg" class="endMarker"></ion-img>
     </mgl-marker>
     } @if (routeSource) {
     <mgl-layer
@@ -101,6 +106,7 @@
           <!-- Botones Viaje Activo -->
           <ion-col size="4">
             <ion-button
+              size="small"
               color="tertiary"
               (click)="viewRouteBtn(
                 viajeActivo.start.longitude, viajeActivo.start.latitude, 
@@ -108,10 +114,14 @@
             >
               <ion-icon src="assets/icons/search.svg"></ion-icon>
             </ion-button>
-            <ion-button color="secondary" id="activeTripModal">
+            <ion-button size="small" color="secondary" id="activeTripModal">
               <ion-icon src="assets/icons/info.svg"></ion-icon>
             </ion-button>
-            <ion-button color="secondary" (click)="getTripId()">
+            <ion-button
+              size="small"
+              color="success"
+              (click)="enableMeetMarker()"
+            >
               <ion-icon src="assets/icons/geo.svg"></ion-icon>
             </ion-button>
 
@@ -231,6 +241,15 @@
             </ion-modal>
           </ion-col>
         </ion-row>
+
+        @if (!isMeetPoint) {
+        <ion-text color="medium">
+          <p>
+            - Marca un Punto de Encuentro con
+            <ion-icon slot="end" src="assets/icons/geo.svg"></ion-icon> -
+          </p>
+        </ion-text>
+        }
       </ion-card-content>
     </ion-card>
     }@else if(!activeTripFound) {

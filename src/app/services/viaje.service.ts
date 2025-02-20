@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
-import { Observable } from 'rxjs';
+import { from, Observable } from 'rxjs';
 import { ILocation, IViaje } from 'src/app/models/IViaje';
 import { environment } from 'src/environments/environment.development';
 import { MapboxDirectionsResponse } from '../models/IDirection';
@@ -49,8 +49,6 @@ export class ViajeService {
     endLat: number
   ): Observable<MapboxDirectionsResponse> {
     const url = `${this.urlDirections}/${initLon},${initLat};${endLon},${endLat}?geometries=geojson&access_token=${environment.map}`;
-
-    console.log('URL Generada: ', url);
 
     return this.http.get<MapboxDirectionsResponse>(url);
   }
@@ -109,6 +107,66 @@ export class ViajeService {
       }
     } catch (err) {
       console.error('Error Inesperado al Borrar UserId de Trip');
+      throw err;
+    }
+  }
+
+  async setSeatLocation(
+    tripId: number,
+    seatNumber: number,
+    seatLocation: number[]
+  ) {
+    try {
+      const seatLocField = `seat${seatNumber}Loc`;
+
+      const { data, error } = await this.supabase
+        .from('trip')
+        .update({ [seatLocField]: seatLocation })
+        .eq('id', tripId);
+
+      if (error) {
+        console.log('Error al Actualizar SeatLocation: ', error);
+        throw error;
+      }
+    } catch (err) {
+      console.error('Error Inesperado al Actualizar SeatLocation: ', err);
+      throw err;
+    }
+  }
+
+  getSeatLocation(tripId: number, seatNumber: number): Observable<any[]> {
+    const seatField = `seat${seatNumber}Loc`;
+
+    return from(
+      this.supabase
+        .from('trip')
+        .select(seatField)
+        .eq('id', tripId)
+        .then(({ data, error }) => {
+          if (error) {
+            console.log('Error al Obtener SeatLocation: ', error);
+            throw error;
+          }
+          return Array.isArray(data) ? data : [data];
+        })
+    );
+  }
+
+  async deleteSeatLocation(tripId: number, seatNumber: number) {
+    try {
+      const seatLocField = `seat${seatNumber}Loc`;
+
+      const { data, error } = await this.supabase
+        .from('trip')
+        .update({ [seatLocField]: null })
+        .eq('id', tripId);
+
+      if (error) {
+        console.log('Error al Eliminar SeatLocation: ', error);
+        throw error;
+      }
+    } catch (err) {
+      console.error('Error Inesperado al Eliminar SeatLocation: ', err);
       throw err;
     }
   }
