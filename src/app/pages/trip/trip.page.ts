@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, OnDestroy } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormBuilder,
@@ -8,11 +8,8 @@ import {
   Validators,
 } from '@angular/forms';
 import {
-  IonCol,
   IonContent,
-  IonGrid,
   IonHeader,
-  IonRow,
   IonTitle,
   IonToolbar,
   IonButton,
@@ -28,6 +25,8 @@ import {
 import { ILocation, IViaje } from 'src/app/models/IViaje';
 import { ViajeService } from 'src/app/services/viaje.service';
 import { Subscription } from 'rxjs';
+import { UserService } from 'src/app/services/user.service';
+import { IUser } from 'src/app/models/IUser';
 
 @Component({
   selector: 'app-trip',
@@ -43,9 +42,6 @@ import { Subscription } from 'rxjs';
     IonHeader,
     IonTitle,
     IonToolbar,
-    IonGrid,
-    IonRow,
-    IonCol,
     IonModal,
     IonItem,
     IonText,
@@ -57,7 +53,9 @@ import { Subscription } from 'rxjs';
   ],
 })
 export class TripPage implements OnInit {
-  private _ViajeService = inject(ViajeService);
+  // Services
+  private _viajeService = inject(ViajeService);
+  private _userService = inject(UserService);
 
   // Arrays Viajes
   viajeActivo: boolean = false;
@@ -72,9 +70,16 @@ export class TripPage implements OnInit {
   isDriver: boolean = true;
   iDriver: string = 'Sergio Apablaza';
 
+  // Forms
   tripForm!: FormGroup;
 
-  // Viaje de Prueba
+  // User Vars
+  user?: IUser;
+  userMail?: string;
+  userName!: string;
+
+  // Subscriptions
+  private userSub!: Subscription;
 
   constructor(private formBuilder: FormBuilder) {
     this.tripForm = this.formBuilder.group({
@@ -85,29 +90,41 @@ export class TripPage implements OnInit {
       seat4: [null],
       start: ['', Validators.required],
       end: ['', Validators.required],
-      driver: [this.iDriver, Validators.required],
+      driver: ['', Validators.required],
       state: [true, Validators.required],
     });
   }
 
   ngOnInit() {
     // this.loadTrips();
+    this.getUser();
     this.loadLocations();
   }
 
   // Suscripcion a GetTrips
   // Correccion: Obtener historial de Trips
   private loadTrips(): void {
-    this.viajeSub = this._ViajeService.getTrips().subscribe({
+    this.viajeSub = this._viajeService.getTrips().subscribe({
       next: (data) => (this.viajes = data),
       error: (error) => console.error('Error fetching Viajes: ', error),
     });
   }
 
   createTrip() {
-    this._ViajeService.postTrip(this.tripForm.value).subscribe({
+    this._viajeService.postTrip(this.tripForm.value).subscribe({
       next: (data) => {
         console.log('Viaje Agregado');
+
+        // Obtener Viaje para Driver
+        this._viajeService.getDriverIdTrip(this.user!.id).subscribe({
+          next: (tripIdObt) => {
+            const idObt = tripIdObt.id;
+
+            // Agregar Trip al Driver
+            this._userService.addTripToUser(this.user!.id, idObt);
+            console.log('Viaje: ', idObt);
+          },
+        });
       },
       error: (error) => {
         console.error('Error al Agregar Viaje: ', error);
@@ -118,7 +135,7 @@ export class TripPage implements OnInit {
 
   // Suscripcion a GetLocations
   loadLocations() {
-    this.ubiSub = this._ViajeService.getLocations().subscribe({
+    this.ubiSub = this._viajeService.getLocations().subscribe({
       next: (data) => {
         this.ubis = data;
       },
@@ -126,6 +143,49 @@ export class TripPage implements OnInit {
     });
   }
 
+  async getUser() {
+    // Obtener Sesión
+    try {
+      const { data, error } = await this._userService.getUsrSession();
+
+      if (error) {
+        console.log('Error al Obtener Sesión: ', error);
+        return;
+      }
+
+      if (data?.user) {
+        this.userMail = data.user.email;
+        console.log('Email Obtenido: ', this.userMail);
+
+        if (this.userMail) {
+          this.userSub = this._userService
+            .getUserData(this.userMail)
+            .subscribe({
+              next: (data) => {
+                this.user = data;
+
+                // Asignacion de userName
+                this.userName = `${this.user.name} ${this.user.lastname}`;
+
+                // Asignacion de Driver para Trip
+                this.tripForm.controls['driver'].setValue(this.user.id);
+
+                console.log('User ID: ', this.user.id);
+              },
+
+              error: (error) =>
+                console.log('Error Obteniendo UserData: ', error),
+            });
+        }
+      } else {
+        console.log('No hay Usuario Autenticado');
+      }
+    } catch (error) {
+      console.log('Algo salio mal: ', error);
+    }
+  }
+
+  // OTHER FUNCTIONS
   formValidError(controlName: string, errorType: string) {
     return (
       this.tripForm.get(controlName)?.hasError(errorType) &&

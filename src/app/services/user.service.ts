@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, lastValueFrom, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment.development';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
-import { IUser, Vehicle } from '../models/IUser';
+import { IUser, IVehicle } from '../models/IUser';
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +18,7 @@ export class UserService {
     this.supabase = createClient(environment.SupaUrl, environment.SupaK);
   }
 
-//USER FUNcTIONS
+  //USER FUNcTIONS
 
   //Crud Usuario
 
@@ -53,7 +53,7 @@ export class UserService {
         .from('user')
         .select(
           `*,
-          activeTrip(*,start(*),end(*))`
+          activeTrip(*,start(*),end(*),driver(*))`
         )
         .eq('email', email)
         .single()
@@ -133,8 +133,7 @@ export class UserService {
     }
   }
 
-
-//VERIFICACIONES
+  //VERIFICACIONES
 
   // Obtener Sesion
   getUsrSession() {
@@ -166,20 +165,18 @@ export class UserService {
         if (response.error) {
           throw new Error(response.error.message);
         }
-        console.log('Response: ', response);
         this.authState.next(true);
         return response;
       });
   }
 
-
-// VEHICLE FUNCIONS
+  // VEHICLE FUNCIONS
 
   // Vehicle Crud
 
   // Funcion Create Vehicle
 
-  getVehiData(userId: number): Observable<Vehicle> {
+  getVehiData(userId: number): Observable<IVehicle> {
     return new Observable((observer) => {
       this.supabase
         .from('vehicle')

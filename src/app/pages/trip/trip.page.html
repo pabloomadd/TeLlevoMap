@@ -7,7 +7,6 @@
 <ion-content [fullscreen]="true">
   @if(isDriver){
   <div class="butts ion-text-center">
-    
     <!-- Crear Nuevo Viaje -->
     <ion-button id="open-modal" color="tertiary" shape="round">
       Crear Viaje
@@ -76,9 +75,7 @@
               <ion-label position="stacked">Conductor:</ion-label>
               <ion-input
                 type="text"
-                formControlName="driver"
-                [placeholder]="iDriver"
-                [value]="iDriver"
+                [placeholder]="userName"
                 readonly
               ></ion-input>
             </ion-item>
@@ -97,9 +94,11 @@
       </ng-template>
     </ion-modal>
   </div>
-  }
-
+  } 
+  
+  @if(user?.usrType === 'passenger'){
   <ion-text color="medium">
     <p>Aún no te has unido a un Viaje</p>
   </ion-text>
+  }
 </ion-content>

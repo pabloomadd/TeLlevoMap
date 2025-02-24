@@ -42,6 +42,42 @@ export class ViajeService {
     });
   }
 
+  getDriverTrip(userId: number): Observable<IViaje> {
+    return new Observable((observer) => {
+      this.supabase
+        .from('trip')
+        .select('*')
+        .eq('driver', userId)
+        .single()
+        .then(({ data, error }) => {
+          if (error) {
+            observer.error(error);
+          } else {
+            observer.next(data || []);
+          }
+          observer.complete();
+        });
+    });
+  }
+
+  getDriverIdTrip(userId: number): Observable<any> {
+    return new Observable((observer) => {
+      this.supabase
+        .from('trip')
+        .select('id')
+        .eq('driver', userId)
+        .single()
+        .then(({ data, error }) => {
+          if (error) {
+            observer.error(error);
+          } else {
+            observer.next(data || []);
+          }
+          observer.complete();
+        });
+    });
+  }
+
   getTripDirections(
     initLon: number,
     initLat: number,

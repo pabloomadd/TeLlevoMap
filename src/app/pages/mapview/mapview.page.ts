@@ -96,7 +96,7 @@ export class MapviewPage implements OnInit {
   usingMeetMarker: boolean = false;
 
   // User Vars
-  user!: IUser;
+  user?: IUser;
   userMail?: string;
   private userSub!: Subscription;
   viajeActivo!: IViaje;
@@ -145,10 +145,11 @@ export class MapviewPage implements OnInit {
   msg!: string;
 
   ngOnInit(): void {
-    console.log('Mapa');
-    this.getGPS();
     this.loadTrips();
     this.getUser();
+
+    console.log('Mapa');
+    this.getGPS();
   }
 
   //MAP FUNCTIONS
@@ -332,10 +333,6 @@ export class MapviewPage implements OnInit {
     });
   }
 
-  getTripId() {
-    console.log('Id del Vieja: ', this.viajeActivo?.id);
-  }
-
   getSeatLocation(tripId: number, seatNumber: number) {
     this._ViajeService.getSeatLocation(tripId, seatNumber).subscribe({
       next: (data) => {
@@ -350,6 +347,11 @@ export class MapviewPage implements OnInit {
         // Asignación del Punto de Encuentro
         this.isMeetPoint = true;
         this.meetPoint = [asiento[0], asiento[1]];
+
+        if (this.user?.usrType === 'driver') {
+          this.toastMsg('Punto de Encuentro Obtenido', true);
+          this.modal.dismiss();
+        }
       },
       error: (err) => {
         console.error('Error al Obtener Ubicacion del Asiento: ', err);
@@ -384,7 +386,7 @@ export class MapviewPage implements OnInit {
       console.log('Eliminado de Trip Table');
 
       // Borrado de User Table
-      this._userService.deleteTripFromUser(this.user.id);
+      this._userService.deleteTripFromUser(this.user!.id);
       console.log('Eliminado de User Table');
 
       // Borrado de SeatLocation
@@ -393,7 +395,6 @@ export class MapviewPage implements OnInit {
         this.currentSeat
       );
       console.log('Borrado el SeatLocation');
-
 
       // Reinicio de Vars
       this.isMeetPoint = false;
@@ -404,6 +405,8 @@ export class MapviewPage implements OnInit {
       this.toastMsg('No haz podido salir del Viaje', true);
     }
   }
+
+  viewMeetPoint() {}
 
   //USER FUNCTIONS
 
@@ -428,18 +431,41 @@ export class MapviewPage implements OnInit {
               next: (data) => {
                 this.user = data;
                 this.viajeActivo = this.user.activeTrip;
+                // Verificacion del Viaje del User
                 if (this.viajeActivo !== null) {
+                  console.log('Viaje Encontrado');
                   this.activeTripFound = true;
-                  this.checkUsrSeat();
 
-                  // Obtención de Ubi del Asiento
-                  this.getSeatLocation(this.viajeActivo.id, this.currentSeat);
+                  // Obtención de Ubi del Asiento solo para Passengers
+                  if (this.user.usrType === 'passenger') {
+                    
+                    this.checkUsrSeat();
+                    // Obtener Seat solo si tiene uno asignado
+                    if (this.currentSeat) {
+                      this.getSeatLocation(this.viajeActivo.id, this.currentSeat);
+                    }
+                  }
+                  console.log(
+                    'Driver del Viaje: ',
+                    this.user.activeTrip.driver.id
+                  );
+
+                  this._userService
+                    .getVehiData(this.user.activeTrip.driver.id)
+                    .subscribe({
+                      next: (vehiData) => {
+                        this.viajeActivo.driver.vehicle = vehiData;
+                      },
+                    });
+
                 } else if (this.viajeActivo === null) {
+                  console.log('Viaje no Encontrado');
+
                   this.activeTripFound = false;
                 }
 
-                console.log('User ID: ', this.user.id);
                 console.log('Trip Obtenido: ', this.user.activeTrip);
+                console.log('User ID: ', this.user.id);
               },
 
               error: (error) =>
@@ -456,19 +482,19 @@ export class MapviewPage implements OnInit {
 
   checkUsrSeat() {
     if (this.viajeActivo) {
-      if (this.viajeActivo.seat1 === this.user.id) {
+      if (this.viajeActivo.seat1 === this.user!.id) {
         this.activeSeat1 = true;
         this.currentSeat = 1;
         console.log('User esta en el Asiento 1');
-      } else if (this.viajeActivo.seat2 === this.user.id) {
+      } else if (this.viajeActivo.seat2 === this.user!.id) {
         this.activeSeat2 = true;
         this.currentSeat = 2;
         console.log('User esta en el Asiento 2');
-      } else if (this.viajeActivo.seat3 === this.user.id) {
+      } else if (this.viajeActivo.seat3 === this.user!.id) {
         this.activeSeat3 = true;
         this.currentSeat = 3;
         console.log('User esta en el Asiento 3');
-      } else if (this.viajeActivo.seat4 === this.user.id) {
+      } else if (this.viajeActivo.seat4 === this.user!.id) {
         this.activeSeat4 = true;
         this.currentSeat = 4;
         console.log('User esta en el Asiento 4');

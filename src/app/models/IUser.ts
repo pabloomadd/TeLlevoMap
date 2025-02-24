@@ -5,12 +5,12 @@ export interface IUser {
   name: string;
   lastname: string;
   email: string;
-  vehicle: Vehicle;
+  vehicle: IVehicle;
   usrType: string;
   activeTrip: IViaje;
 }
 
-export interface Vehicle {
+export interface IVehicle {
   id: number;
   brand: string;
   model: string;

@@ -27,7 +27,7 @@ import {
 } from '@ionic/angular/standalone';
 import { Subscription } from 'rxjs';
 import { UserService } from 'src/app/services/user.service';
-import { IUser, Vehicle } from 'src/app/models/IUser';
+import { IUser, IVehicle } from 'src/app/models/IUser';
 import { RouterModule } from '@angular/router';
 
 @Component({
@@ -63,7 +63,7 @@ export class PerfilPage implements OnInit {
   private _userService = inject(UserService);
 
   user!: IUser;
-  vehicle!: Vehicle;
+  vehicle!: IVehicle;
 
   // Subscriptions
   private userSub!: Subscription;
