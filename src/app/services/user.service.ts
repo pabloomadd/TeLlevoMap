@@ -18,7 +18,7 @@ export class UserService {
     this.supabase = createClient(environment.SupaUrl, environment.SupaK);
   }
 
-  //USER FUNcTIONS
+  //USER FUNCTIONS
 
   //Crud Usuario
 
@@ -81,7 +81,7 @@ export class UserService {
         .eq('email', email);
 
       if (error) {
-        console.error('Error al Actualizar Usuario: ', error);
+        //console.error('Error al Actualizar Usuario: ', error);
         throw error;
       }
 
@@ -111,7 +111,7 @@ export class UserService {
         throw error;
       }
     } catch (err) {
-      console.error('Error Inesperado al Agregar Uusario al Trip: ', err);
+      console.error('Error Inesperado al Agregar Usario al Trip: ', err);
       throw err;
     }
   }
@@ -212,8 +212,6 @@ export class UserService {
         console.error('Error al Actualizar Vehiculo: ', error);
         throw error;
       }
-
-      console.log('Filas afectadas:', count);
 
       return data;
     } catch (err) {

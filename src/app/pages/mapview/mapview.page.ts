@@ -1,4 +1,10 @@
-import { Component, inject, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  inject,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AnyLayer, LngLatLike, Map } from 'mapbox-gl';
@@ -35,6 +41,7 @@ import * as mapboxgl from 'mapbox-gl';
 import { Feature, LineString } from 'geojson';
 import { UserService } from 'src/app/services/user.service';
 import { IUser } from 'src/app/models/IUser';
+import { GlobalService } from 'src/app/services/global.service';
 
 @Component({
   selector: 'app-mapview',
@@ -64,7 +71,7 @@ import { IUser } from 'src/app/models/IUser';
     IonActionSheet,
     IonToast,
   ],
-  providers: [{ provide: MAPBOX_API_KEY, useValue: environment.map }],
+  providers: [{ provide: MAPBOX_API_KEY, useValue: '' }],
 })
 export class MapviewPage implements OnInit {
   @ViewChild('map') mapRef: any;
@@ -75,6 +82,7 @@ export class MapviewPage implements OnInit {
   // Services
   private _ViajeService = inject(ViajeService);
   private _userService = inject(UserService);
+  private _globalService = inject(GlobalService);
 
   // Variables
   labelLayerId?: string;
@@ -144,12 +152,16 @@ export class MapviewPage implements OnInit {
   isToastOpen!: boolean;
   msg!: string;
 
-  ngOnInit(): void {
-    this.loadTrips();
-    this.getUser();
+  async ngOnInit(): Promise<void> {
+    try {
+      await Promise.all([this.getGPS(), this.getUser(), this.loadTrips()]);
 
-    console.log('Mapa');
-    this.getGPS();
+      console.log('Mapa Cargado');
+    } catch (error) {
+      console.log('Error durante la inicializacion: ', error);
+    } finally {
+      this._globalService.hideLoading();
+    }
   }
 
   //MAP FUNCTIONS
@@ -173,7 +185,7 @@ export class MapviewPage implements OnInit {
       this.isMeetPoint = true;
       console.log('Meet Marker Deshabilitado');
 
-      console.log('Punto de Encuentro: ', this.meetPoint);
+      //console.log('Punto de Encuentro: ', this.meetPoint);
 
       this._ViajeService
         .setSeatLocation(this.viajeActivo.id, this.currentSeat, this.meetPoint)
@@ -234,7 +246,7 @@ export class MapviewPage implements OnInit {
       // Centrado en Gps
       this.centro = this.gps;
 
-      console.log(`GPS obtenido: ${this.gps.lat}, ${this.gps.lon}`);
+      //console.log(`GPS obtenido: ${this.gps.lat}, ${this.gps.lon}`);
     } catch (error) {
       console.error('Error obteniendo GPS:', error);
     }
@@ -301,14 +313,17 @@ export class MapviewPage implements OnInit {
     endLat: number,
     index: number
   ) {
-    console.log(
-      `-Coordenadas del Viaje- Inicio: ${initLon}, ${initLat}, Fin:${endLon}, ${endLat}`
-    );
+    // console.log(
+    //   `-Coordenadas del Viaje- Inicio: ${initLon}, ${initLat}, Fin:${endLon}, ${endLat}`
+    // );
 
     this._ViajeService
       .getTripDirections(initLon, initLat, endLon, endLat)
       .subscribe((response: MapboxDirectionsResponse) => {
         this.displayRoute(response);
+        if (this.user?.usrType === 'driver') {
+          this.isMeetPoint = false;
+        }
 
         // Cambio de Markers
         this.inicio = { lon: initLon, lat: initLat };
@@ -322,11 +337,41 @@ export class MapviewPage implements OnInit {
       });
   }
 
+  viewMeetPointRoute(
+    initLon: number,
+    initLat: number,
+    endLon: number,
+    endLat: number
+  ) {
+    // console.log(
+    //   `-Coordenadas del Viaje- Inicio: ${initLon}, ${initLat}, Fin:${endLon}, ${endLat}`
+    // );
+
+    this._ViajeService
+      .getTripDirections(initLon, initLat, endLon, endLat)
+      .subscribe((response: MapboxDirectionsResponse) => {
+        this.displayRoute(response);
+
+        setTimeout(() => {
+          this.centerMap();
+        }, 500);
+      });
+  }
+
+  viewRouteToMeetPoint() {
+    if (this.gps && this.meetPoint) {
+      const { lon, lat } = this.gps as { lon: number; lat: number };
+      const [endLon, endLat] = this.meetPoint;
+
+      this.viewMeetPointRoute(lon, lat, endLon, endLat);
+    } else {
+      console.warn('No hay GPS o meetPoint');
+    }
+  }
+
   //TRIP FUNCTIONS
 
   private loadTrips(): void {
-    console.log('Hola Load');
-
     this.viajeSub = this._ViajeService.getTrips().subscribe({
       next: (data) => (this.viajes = data),
       error: (error) => console.error('Error fetching Viajes: ', error),
@@ -349,6 +394,7 @@ export class MapviewPage implements OnInit {
         this.meetPoint = [asiento[0], asiento[1]];
 
         if (this.user?.usrType === 'driver') {
+          this.viewRouteToMeetPoint();
           this.toastMsg('Punto de Encuentro Obtenido', true);
           this.modal.dismiss();
         }
@@ -363,11 +409,11 @@ export class MapviewPage implements OnInit {
     try {
       // Agregar en el Trip Table
       this._ViajeService.updateTrip(tripId, seatNumber, userId);
-      console.log('Agregado User en Trip Table');
+      //console.log('Agregado User en Trip Table');
 
       // Actualizar en User Table
       this._userService.addTripToUser(userId, tripId);
-      console.log('Agregado Trip en User Table');
+      //console.log('Agregado Trip en User Table');
 
       this.toastMsg('Te has unido al Viaje', true);
 
@@ -383,11 +429,11 @@ export class MapviewPage implements OnInit {
     try {
       // Borrado de Trip Table
       this._ViajeService.cancelTrip(this.viajeActivo.id, seatNumber);
-      console.log('Eliminado de Trip Table');
+      //console.log('Eliminado de Trip Table');
 
       // Borrado de User Table
       this._userService.deleteTripFromUser(this.user!.id);
-      console.log('Eliminado de User Table');
+      //console.log('Eliminado de User Table');
 
       // Borrado de SeatLocation
       this._ViajeService.deleteSeatLocation(
@@ -406,8 +452,6 @@ export class MapviewPage implements OnInit {
     }
   }
 
-  viewMeetPoint() {}
-
   //USER FUNCTIONS
 
   async getUser() {
@@ -422,7 +466,8 @@ export class MapviewPage implements OnInit {
 
       if (data?.user) {
         this.userMail = data.user.email;
-        console.log('Email Obtenido: ', this.userMail);
+
+        //console.log('Email Obtenido: ', this.userMail);
 
         if (this.userMail) {
           this.userSub = this._userService
@@ -438,17 +483,19 @@ export class MapviewPage implements OnInit {
 
                   // Obtención de Ubi del Asiento solo para Passengers
                   if (this.user.usrType === 'passenger') {
-                    
                     this.checkUsrSeat();
                     // Obtener Seat solo si tiene uno asignado
                     if (this.currentSeat) {
-                      this.getSeatLocation(this.viajeActivo.id, this.currentSeat);
+                      this.getSeatLocation(
+                        this.viajeActivo.id,
+                        this.currentSeat
+                      );
                     }
                   }
-                  console.log(
-                    'Driver del Viaje: ',
-                    this.user.activeTrip.driver.id
-                  );
+                  // console.log(
+                  //   'Driver del Viaje: ',
+                  //   this.user.activeTrip.driver.id
+                  // );
 
                   this._userService
                     .getVehiData(this.user.activeTrip.driver.id)
@@ -457,15 +504,14 @@ export class MapviewPage implements OnInit {
                         this.viajeActivo.driver.vehicle = vehiData;
                       },
                     });
-
                 } else if (this.viajeActivo === null) {
                   console.log('Viaje no Encontrado');
 
                   this.activeTripFound = false;
                 }
 
-                console.log('Trip Obtenido: ', this.user.activeTrip);
-                console.log('User ID: ', this.user.id);
+                // console.log('Trip Obtenido: ', this.user.activeTrip);
+                // console.log('User ID: ', this.user.id);
               },
 
               error: (error) =>

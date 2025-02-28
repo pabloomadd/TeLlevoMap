@@ -119,7 +119,7 @@ export class ViajeService {
         .eq('id', tripId);
 
       if (error) {
-        console.log(`Error al Actualizar Viaje de Id: ${tripId}, ${error}`);
+        //console.log(`Error al Actualizar Viaje de Id: ${tripId}, ${error}`);
         throw error;
       }
     } catch (err) {

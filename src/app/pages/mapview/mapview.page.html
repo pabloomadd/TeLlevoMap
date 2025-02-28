@@ -56,10 +56,14 @@
     <mgl-marker [lngLat]="destino">
       <ion-img src="assets/icons/geo.svg" class="endMarker"></ion-img>
     </mgl-marker>
+
+    <!-- MeetPoint Marker -->
     } @if(isMeetPoint){
     <mgl-marker [lngLat]="meetPoint">
       <ion-img src="assets/icons/meet.svg" class="endMarker"></ion-img>
     </mgl-marker>
+    
+
     } @if (routeSource) {
     <mgl-layer
       [id]="'routerLayer'"

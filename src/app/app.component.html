@@ -1,6 +1,18 @@
 <ion-app>
+  
+  @if (isLoading) {
+
+  <div class="loadView">
+    <ion-spinner name="circular" class="spin"></ion-spinner>
+    <h1>Cargando...</h1>
+  </div>
+
+  }
+
   <ion-router-outlet></ion-router-outlet>
+
   @if (isAuth) {
   <app-mobnav></app-mobnav>
-  }
+  } 
+  
 </ion-app>

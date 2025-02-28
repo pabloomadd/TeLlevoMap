@@ -122,7 +122,6 @@ export class TripPage implements OnInit {
 
             // Agregar Trip al Driver
             this._userService.addTripToUser(this.user!.id, idObt);
-            console.log('Viaje: ', idObt);
           },
         });
       },
@@ -155,7 +154,6 @@ export class TripPage implements OnInit {
 
       if (data?.user) {
         this.userMail = data.user.email;
-        console.log('Email Obtenido: ', this.userMail);
 
         if (this.userMail) {
           this.userSub = this._userService
@@ -169,8 +167,6 @@ export class TripPage implements OnInit {
 
                 // Asignacion de Driver para Trip
                 this.tripForm.controls['driver'].setValue(this.user.id);
-
-                console.log('User ID: ', this.user.id);
               },
 
               error: (error) =>

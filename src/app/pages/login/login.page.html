@@ -42,13 +42,28 @@
       </form>
 
       <div class="ion-text-center">
-        <br /><br />
         ¿Aún no tienes cuenta?
+        <a [routerLink]="['/registro']">Regístrate</a>
         <br />
-        <ion-button color="tertiary" [routerLink]="['/registro']">
-          Registrate
+        <ion-button class="demoBtn" (click)="openDemoSheet()" color="primary">
+          Acceder como Invitado
         </ion-button>
+
+        <ion-action-sheet
+          header="Ingresar como:"
+          [buttons]="demoSheetBtns"
+          (ionActionSheetDidDismiss)="demoSheetAction($event)"
+        ></ion-action-sheet>
       </div>
     </ion-card-content>
   </ion-card>
+  <section class="footer">
+    <ion-text color="medium" class="ion-text-center">
+      <p>
+        © <span>{{annio}}</span> TeLLevoApp by
+        <a href="https://github.com/pabloomadd" target="”_blank”">pabloomadd</a>
+      </p>
+      <p>Todos los Derechos Reservados.</p>
+    </ion-text>
+  </section>
 </ion-content>

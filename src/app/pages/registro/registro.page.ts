@@ -59,20 +59,17 @@ export class RegistroPage {
 
       if (userExists) {
         this.alertMsg('El usuario ya existe', true);
-        console.log('El usuario ya está registrado. Proceso detenido.');
+        console.log('El usuario ya está registrado');
 
         return;
       }
-
-      // Continuar con el registro
-      console.log('El usuario no está registrado. Procediendo al registro...');
 
       // Registro en Auth
       const usrResp = await this._usrService.createUser(
         this.regForm.value.email,
         this.regForm.value.pass
       );
-      console.log('Usuario Registrado ', usrResp);
+      //console.log('Usuario Registrado ', usrResp);
 
       // Registro en Base de Datos
       await this.saveUsrData();

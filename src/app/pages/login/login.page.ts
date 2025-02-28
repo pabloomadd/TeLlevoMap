@@ -10,6 +10,8 @@ import {
 import { IonicModule } from '@ionic/angular';
 import { Router, RouterModule } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
+import { environment } from 'src/environments/environment.development';
+import { GlobalService } from 'src/app/services/global.service';
 
 @Component({
   selector: 'app-login',
@@ -28,12 +30,40 @@ export class LoginPage implements OnInit {
   // Services
   private _userService = inject(UserService);
   private _router = inject(Router);
+  private _globalService = inject(GlobalService);
 
   // Flags
   logging: boolean = false;
 
   // Forms
   logForm!: FormGroup;
+
+  // Action Sheet Btns
+  public demoSheetBtns = [
+    {
+      text: 'Pasajero',
+      data: {
+        action: 'passe',
+      },
+    },
+    {
+      text: 'Conductor',
+
+      data: {
+        action: 'driver',
+      },
+    },
+    {
+      text: 'Cancelar',
+      role: 'cancel',
+      data: {
+        action: 'cancel',
+      },
+    },
+  ];
+
+  date = new Date();
+  annio?: number;
 
   constructor(private formBuilder: FormBuilder) {
     this.logForm = this.formBuilder.group({
@@ -43,7 +73,7 @@ export class LoginPage implements OnInit {
   }
 
   ngOnInit() {
-    console.log('Hola Login');
+    this.getCurrentYear();
   }
 
   // Lógica Login
@@ -56,7 +86,7 @@ export class LoginPage implements OnInit {
         this.logForm.value.pass
       );
       console.log('Logueo con Éxito');
-
+      this._globalService.showLoading();
       this._router.navigate(['/mapview']);
     } catch (error) {
       console.error('Error en Proceso de Login: ', error);
@@ -66,10 +96,43 @@ export class LoginPage implements OnInit {
     }
   }
 
+  openDemoSheet() {
+    const actionSheet = document.querySelector('ion-action-sheet');
+    actionSheet?.present();
+  }
+
+  demoSheetAction(event: any) {
+    try {
+      const action = event.detail.data?.action;
+
+      if (action === 'cancel') {
+        console.log('Cancelado');
+      } else if (action === 'passe') {
+        console.log('Pasajero');
+        this._userService.logInWEmail(environment.user3, environment.user4);
+        this._globalService.showLoading();
+      } else if (action === 'driver') {
+        console.log('Conductor');
+        this._userService.logInWEmail(environment.user1, environment.user2);
+        this._globalService.showLoading();
+      }
+
+      setTimeout(() => {
+        this._router.navigate(['mapview']);
+      }, 500);
+    } catch (error) {
+      console.log('Error al Ingresar como Invitado');
+    }
+  }
+
   formValidError(controlName: string, errorType: string) {
     return (
       this.logForm.get(controlName)?.hasError(errorType) &&
       this.logForm.get(controlName)?.touched
     );
+  }
+
+  getCurrentYear() {
+    this.annio = this.date.getFullYear();
   }
 }
