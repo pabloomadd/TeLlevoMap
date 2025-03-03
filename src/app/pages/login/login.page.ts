@@ -107,19 +107,29 @@ export class LoginPage implements OnInit {
 
       if (action === 'cancel') {
         console.log('Cancelado');
-      } else if (action === 'passe') {
-        console.log('Pasajero');
-        this._userService.logInWEmail(environment.user3, environment.user4);
-        this._globalService.showLoading();
-      } else if (action === 'driver') {
-        console.log('Conductor');
-        this._userService.logInWEmail(environment.user1, environment.user2);
-        this._globalService.showLoading();
-      }
+      } else {
+        let userDemo = '';
+        let passDemo = '';
+        if (action === 'passe' || action === 'driver') {
+          if (action === 'passe') {
+            console.log('Pasajero');
+            userDemo = environment.user1;
+            passDemo = environment.user2;
+          } else {
+            console.log('Conductor');
+            userDemo = environment.user3;
+            passDemo = environment.user4;
+          }
 
-      setTimeout(() => {
-        this._router.navigate(['mapview']);
-      }, 500);
+          this.logForm.patchValue({
+            email: userDemo,
+            pass: passDemo,
+          });
+
+          this.logIn();
+          this._globalService.showLoading();
+        }
+      }
     } catch (error) {
       console.log('Error al Ingresar como Invitado');
     }
