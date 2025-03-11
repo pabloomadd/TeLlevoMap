@@ -246,7 +246,7 @@
                               4
                             </ion-button>
 
-                            <ion-action-sheet
+                            <ion-action-sheet class="exitTrip"
                               header="Seguro que quieres salir del viaje?"
                               [buttons]="actionSheetBtns"
                               (ionActionSheetDidDismiss)="sheetAction($event)"
@@ -276,6 +276,7 @@
     </ion-card>
     }@else if(!activeTripFound) {
     <!-- Vista Todos los Viajes -->
+    <!-- Agregar Consulta en RealTime -->
     <ion-content class="tripScroll">
       @for (viaje of viajes; track $index){
       <ion-card

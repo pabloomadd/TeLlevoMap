@@ -71,7 +71,7 @@ import { GlobalService } from 'src/app/services/global.service';
     IonActionSheet,
     IonToast,
   ],
-  providers: [{ provide: MAPBOX_API_KEY, useValue: '' }],
+  providers: [{ provide: MAPBOX_API_KEY, useValue: environment.map }],
 })
 export class MapviewPage implements OnInit {
   @ViewChild('map') mapRef: any;
@@ -555,7 +555,7 @@ export class MapviewPage implements OnInit {
 
   openSheet(seatNumber: number) {
     this.selectedSeat = seatNumber;
-    const actionSheet = document.querySelector('ion-action-sheet');
+    const actionSheet = document.querySelector('.exitTrip') as HTMLIonActionSheetElement;
     actionSheet?.present();
   }
 

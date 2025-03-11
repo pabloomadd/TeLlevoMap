@@ -113,12 +113,12 @@ export class LoginPage implements OnInit {
         if (action === 'passe' || action === 'driver') {
           if (action === 'passe') {
             console.log('Pasajero');
-            userDemo = environment.user1;
-            passDemo = environment.user2;
-          } else {
-            console.log('Conductor');
             userDemo = environment.user3;
             passDemo = environment.user4;
+          } else {
+            console.log('Conductor');
+            userDemo = environment.user1;
+            passDemo = environment.user2;
           }
 
           this.logForm.patchValue({
