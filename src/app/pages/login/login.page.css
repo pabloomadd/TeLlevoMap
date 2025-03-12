@@ -1,11 +1,23 @@
-ion-button{
+ion-button {
   margin-top: 15px;
 }
 
-.demoBtn{
+.header {
+  margin-top: 30%;
+}
+
+.logoImg {
+  margin-top: 50px;
+}
+
+.bodyContent {
+  margin-top: 10%;
+}
+
+.demoBtn {
   margin-top: 20px;
 }
 
-.footer{
+.footer {
   margin-top: 100px;
 }

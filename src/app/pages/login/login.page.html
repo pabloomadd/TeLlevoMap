@@ -1,62 +1,26 @@
-<ion-content>
-  <ion-card>
-    <ion-card-content>
-      <ion-card-header>
-        <ion-card-title class="ion-text-center"> TeLLevoApp </ion-card-title>
-      </ion-card-header>
-    </ion-card-content>
-    <br />
-    <ion-card-content class="ion-text-center">
+<ion-content class="main">
+
+  <ion-card-content class="header ion-text-center">
+    <ion-card-header>
+      <h1 class="appTitle"> TeLLevo App </h1>
+    </ion-card-header>
+    <ion-card-content class="logoImg">
       <img alt="logoApp" src="assets/imgs/coche.png" />
     </ion-card-content>
-    <br />
-    <ion-card-content>
-      <form [formGroup]="logForm" (submit)="logIn()">
-        <ion-item>
-          <ion-input
-            formControlName="email"
-            type="text"
-            label="Correo Electrónico"
-            labelPlacement="floating"
-            fill="solid"
-          ></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-input
-            formControlName="pass"
-            type="password"
-            label="Contraseña"
-            labelPlacement="floating"
-            fill="solid"
-          ></ion-input>
-        </ion-item>
-        <div class="ion-text-center">
-          <ion-button
-            color="success"
-            type="submit"
-            [disabled]="logForm.invalid"
-          >
-            Acceder
-          </ion-button>
-        </div>
-      </form>
+  </ion-card-content>
 
-      <div class="ion-text-center">
-        ¿Aún no tienes cuenta?
-        <a [routerLink]="['/registro']">Regístrate</a>
-        <br />
-        <ion-button class="demoBtn" (click)="openDemoSheet()" color="primary">
-          Acceder como Invitado
-        </ion-button>
+  <ion-card-content class="bodyContent">
+    <div class="ion-text-center">
+      
+      <ion-button class="demoBtn" (click)="openDemoSheet()" color="tertiary" shape="round">
+        Acceder al Demo
+      </ion-button>
 
-        <ion-action-sheet
-          header="Ingresar como:"
-          [buttons]="demoSheetBtns"
-          (ionActionSheetDidDismiss)="demoSheetAction($event)"
-        ></ion-action-sheet>
-      </div>
-    </ion-card-content>
-  </ion-card>
+      <ion-action-sheet header="Ingresar como:" [buttons]="demoSheetBtns"
+        (ionActionSheetDidDismiss)="demoSheetAction($event)"></ion-action-sheet>
+    </div>
+  </ion-card-content>
+
   <section class="footer">
     <ion-text color="medium" class="ion-text-center">
       <p>
