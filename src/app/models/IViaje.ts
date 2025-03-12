@@ -10,7 +10,7 @@ export interface IViaje {
   seat4: number;
   start: ILocation;
   end: ILocation;
-  state: string;
+  state: boolean;
   seat1Loc: number[];
   seat2Loc: number[];
   seat3Loc: number[];

@@ -71,7 +71,7 @@ import { GlobalService } from 'src/app/services/global.service';
     IonActionSheet,
     IonToast,
   ],
-  providers: [{ provide: MAPBOX_API_KEY, useValue: environment.map }],
+  providers: [{ provide: MAPBOX_API_KEY, useValue: '' }],
 })
 export class MapviewPage implements OnInit {
   @ViewChild('map') mapRef: any;
@@ -117,6 +117,10 @@ export class MapviewPage implements OnInit {
   // Flags
   pcMode: boolean = true;
   openCard: boolean = false;
+  verAsiento: boolean = true;
+
+  isViewingSeat?: number;
+  isViewingPsg?: any;
 
   // Asientos Activos Flags
   activeSeat1: boolean = false;
@@ -129,6 +133,23 @@ export class MapviewPage implements OnInit {
 
   // Action Sheet Btns
   public actionSheetBtns = [
+    {
+      text: 'No',
+      role: 'cancel',
+      data: {
+        action: 'cancel',
+      },
+    },
+    {
+      text: 'Si',
+      role: 'destructive',
+      data: {
+        action: 'delete',
+      },
+    },
+  ];
+
+  public completeTripSheetBtns = [
     {
       text: 'No',
       role: 'cancel',
@@ -396,6 +417,18 @@ export class MapviewPage implements OnInit {
         if (this.user?.usrType === 'driver') {
           this.viewRouteToMeetPoint();
           this.toastMsg('Punto de Encuentro Obtenido', true);
+
+          const seatInfo = (this.user.activeTrip as any)[`seat${seatNumber}`];
+
+          // Ver Datos del Usuario segun Asiento
+          this._userService.getUserDataByID(seatInfo).subscribe((data) => {
+            this.isViewingPsg = `${data.name} ${data.lastname}`;
+            console.log('Pasajero: ', this.isViewingPsg);
+          });
+
+          // Feedback de Vista de Punto de Encuentro
+          this.isViewingSeat = seatNumber;
+
           this.modal.dismiss();
         }
       },
@@ -452,6 +485,18 @@ export class MapviewPage implements OnInit {
     }
   }
 
+  completeTrip(tripId: number) {
+    try {
+      this._ViajeService.completeTrip(tripId);
+      this.activeTripFound = false;
+      this._userService.deleteTripFromUser(this.user!.id);
+      this.toastMsg('Viaje Completado', true);
+      this.modal.dismiss();
+    } catch (error) {
+      this.toastMsg('Error al Completar Viaje', true);
+    }
+  }
+
   //USER FUNCTIONS
 
   async getUser() {
@@ -476,8 +521,11 @@ export class MapviewPage implements OnInit {
               next: (data) => {
                 this.user = data;
                 this.viajeActivo = this.user.activeTrip;
-                // Verificacion del Viaje del User
-                if (this.viajeActivo !== null) {
+
+                // Solo son Válidos los Viajes con Estate True
+                const validaViaje = this.viajeActivo.state;
+
+                if (validaViaje) {
                   console.log('Viaje Encontrado');
                   this.activeTripFound = true;
 
@@ -504,7 +552,7 @@ export class MapviewPage implements OnInit {
                         this.viajeActivo.driver.vehicle = vehiData;
                       },
                     });
-                } else if (this.viajeActivo === null) {
+                } else if (!validaViaje) {
                   console.log('Viaje no Encontrado');
 
                   this.activeTripFound = false;
@@ -553,9 +601,12 @@ export class MapviewPage implements OnInit {
     this.openCard = !this.openCard;
   }
 
+  // Exit Trip Sheet Action
   openSheet(seatNumber: number) {
     this.selectedSeat = seatNumber;
-    const actionSheet = document.querySelector('.exitTrip') as HTMLIonActionSheetElement;
+    const actionSheet = document.querySelector(
+      '.exitTrip'
+    ) as HTMLIonActionSheetElement;
     actionSheet?.present();
   }
 
@@ -577,6 +628,26 @@ export class MapviewPage implements OnInit {
     this.selectedSeat = null;
   }
 
+  // Complete Trip Sheet Action
+  openCompleteTripSheet() {
+    const actionSheet = document.querySelector(
+      '.completeTripSheet'
+    ) as HTMLIonActionSheetElement;
+    actionSheet?.present();
+  }
+
+  sheetCompleteAction(event: any) {
+    const action = event.detail.data?.action;
+
+    if (action === 'delete') {
+      console.log('Viaje Completado');
+      this.completeTrip(this.viajeActivo.id);
+    } else if (action === 'cancel') {
+      console.log('Cancelada la Completa del Viaje');
+    }
+  }
+
+  // Toast Messages
   toastMsg(message: string, toast: boolean) {
     this.msg = message;
 
@@ -592,5 +663,13 @@ export class MapviewPage implements OnInit {
     this.usingMeetMarker = true;
     this.toastMsg('Selecciona un Punto de Encuentro en el Mapa', true);
     console.log('Meet Marker Habilitado');
+  }
+
+  closeMeetInfo() {
+    this.isMeetPoint = !this.isMeetPoint;
+
+    // Borrar la Ruta
+    this.map.removeLayer('route-layer');
+    this.map.removeSource('route');
   }
 }

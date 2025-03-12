@@ -5,29 +5,11 @@
 </ion-header>
 <ion-content [fullscreen]="true">
   <div class="configList">
-    <ion-button
-      class="ion-margin"
-      expand="block"
-      shape="round"
-      [routerLink]="'/perfil'"
-    >
+    <ion-button class="ion-margin" expand="block" shape="round" [routerLink]="'/perfil'">
       Datos Personales
     </ion-button>
-    <ion-button
-      class="ion-margin"
-      expand="block"
-      shape="round"
-      [routerLink]="'/config'"
-    >
-      Configuración
-    </ion-button>
-    <ion-button
-      class="ion-margin"
-      color="danger"
-      expand="block"
-      shape="round"
-      (click)="logOut()"
-    >
+
+    <ion-button class="ion-margin" color="danger" expand="block" shape="round" (click)="logOut()">
       Cerrar Sesión
     </ion-button>
   </div>

@@ -29,8 +29,13 @@ export class ViajeService {
         .select(
           `*,
           start(*),
-          end(*)`
+          end(*),
+          seat1,
+          seat2,
+          seat3,
+          seat4`
         )
+        .eq('state', true)
         .then(({ data, error }) => {
           if (error) {
             observer.error(error);
@@ -124,6 +129,23 @@ export class ViajeService {
       }
     } catch (err) {
       console.error('Error inesperado al Actualizar Viaje: ', err);
+      throw err;
+    }
+  }
+
+  async completeTrip(tripId: number): Promise<any> {
+    try {
+      const { data, error } = await this.supabase
+        .from('trip')
+        .update({ state: false })
+        .eq('id', tripId);
+
+      if (error) {
+        console.log(`Error al Completar el Viaje: , ${error}`);
+        throw error;
+      }
+    } catch (err) {
+      console.error('Error inesperado al Completar Viaje: ', err);
       throw err;
     }
   }

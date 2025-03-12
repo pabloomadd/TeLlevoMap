@@ -17,12 +17,13 @@
 
 #### v1.1.0:
 
+- Agregado Completar Viaje a Conductor
 - Agregado Ver Punto de Encuentro de Viaje a Conductor
 - Agregado Punto de Encuentro a Pasajero
 - Agregado Vista de Pasajero/Conductor
 - Agregado Datos Personales
 - Agregado Vista de Detalles de Viaje
-- Agregado Usuario Demo COnductor y Pasajero
+- Agregado Usuario Demo Conductor y Pasajero
 - Vista a Detalles de Viajes
 - Mejorada la Vista de Viajes
 - Cambio Google Maps a Mapbox

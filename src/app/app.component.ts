@@ -21,7 +21,9 @@ export class AppComponent implements OnInit, OnDestroy {
 
   isLoading: boolean = false;
 
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService) {
+    document.body.classList.toggle('dark', true);
+  }
 
   ngOnInit(): void {
     this._globalService.loading$.subscribe((loading) => {

@@ -68,6 +68,24 @@ export class UserService {
     });
   }
 
+  getUserDataByID(userId: number): Observable<IUser> {
+    return new Observable((observer) => {
+      this.supabase
+        .from('user')
+        .select(`*`)
+        .eq('id', userId)
+        .single()
+        .then(({ data, error }) => {
+          if (error) {
+            observer.error(error);
+          } else {
+            observer.next(data);
+          }
+          observer.complete();
+        });
+    });
+  }
+
   async updateUserData(
     email: string,
     name: string,

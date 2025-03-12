@@ -1,21 +1,8 @@
 <div class="map-container">
-  <mgl-map
-    [style]="'mapbox://styles/mapbox/streets-v12'"
-    [zoom]="[15.5]"
-    [center]="centro"
-    [pitch]="[45]"
-    [bearing]="[-17.6]"
-    (mapLoad)="onLoad($event.target)"
-    (mapClick)="onMapClick($event)"
-  >
-    <mgl-layer
-      id="3d-buildings"
-      source="composite"
-      sourceLayer="building"
-      [filter]="['==', 'extrude', 'true']"
-      type="fill-extrusion"
-      [minzoom]="15"
-      [paint]="{
+  <mgl-map [style]="'mapbox://styles/mapbox/streets-v12'" [zoom]="[15.5]" [center]="centro" [pitch]="[45]"
+    [bearing]="[-17.6]" (mapLoad)="onLoad($event.target)" (mapClick)="onMapClick($event)">
+    <mgl-layer id="3d-buildings" source="composite" sourceLayer="building" [filter]="['==', 'extrude', 'true']"
+      type="fill-extrusion" [minzoom]="15" [paint]="{
       'fill-extrusion-color': '#aaa',
       'fill-extrusion-height': [
         'interpolate',
@@ -36,9 +23,7 @@
         ['get', 'min_height']
       ],
       'fill-extrusion-opacity': 0.6
-    }"
-      [before]="labelLayerId"
-    ></mgl-layer>
+    }" [before]="labelLayerId"></mgl-layer>
 
     <!-- GPS Marker -->
     @if (gps) {
@@ -62,15 +47,10 @@
     <mgl-marker [lngLat]="meetPoint">
       <ion-img src="assets/icons/meet.svg" class="endMarker"></ion-img>
     </mgl-marker>
-    
+
 
     } @if (routeSource) {
-    <mgl-layer
-      [id]="'routerLayer'"
-      [type]="'line'"
-      [source]="routeSource"
-      [paint]="routePaint"
-    >
+    <mgl-layer [id]="'routerLayer'" [type]="'line'" [source]="routeSource" [paint]="routePaint">
     </mgl-layer>
     }
   </mgl-map>
@@ -112,23 +92,15 @@
 
           <!-- Botones Viaje Activo -->
           <ion-col size="4">
-            <ion-button
-              size="small"
-              color="tertiary"
-              (click)="viewRouteBtn(
+            <ion-button size="small" color="tertiary" (click)="viewRouteBtn(
                   viajeActivo.start.longitude, viajeActivo.start.latitude, 
-                  viajeActivo.end.longitude, viajeActivo.end.latitude, viajeActivo.id)"
-            >
+                  viajeActivo.end.longitude, viajeActivo.end.latitude, viajeActivo.id)">
               <ion-icon src="assets/icons/search.svg"></ion-icon>
             </ion-button>
             <ion-button size="small" color="secondary" id="activeTripModal">
               <ion-icon src="assets/icons/info.svg"></ion-icon>
             </ion-button>
-            <ion-button
-              size="small"
-              color="success"
-              (click)="enableMeetMarker()"
-            >
+            <ion-button size="small" color="success" (click)="enableMeetMarker()">
               <ion-icon src="assets/icons/geo.svg"></ion-icon>
             </ion-button>
 
@@ -149,10 +121,7 @@
                   <!-- Info Viaje -->
                   <div class="seatContainer">
                     <!-- Fondo CarRef -->
-                    <ion-img
-                      src="assets/imgs/cartop.png"
-                      class="seatRef"
-                    ></ion-img>
+                    <ion-img src="assets/imgs/cartop.png" class="seatRef"></ion-img>
 
                     <ion-card class="tripDetCard">
                       <p>
@@ -168,9 +137,7 @@
                         {{viajeActivo.end.name}}
                       </p>
                       <p>
-                        <span
-                          ><ion-text color="medium">Conductor:</ion-text></span
-                        >
+                        <span><ion-text color="medium">Conductor:</ion-text></span>
                         {{viajeActivo.driver.name}}
                       </p>
                       <p>
@@ -183,9 +150,7 @@
                         {{viajeActivo.driver.vehicle.color}}
                       </p>
                       <p>
-                        <span
-                          ><ion-text color="medium">Patente:</ion-text></span
-                        >
+                        <span><ion-text color="medium">Patente:</ion-text></span>
                         {{viajeActivo.driver.vehicle.licPlate}}
                       </p>
                     </ion-card>
@@ -200,19 +165,11 @@
                       <div class="seatBtn">
                         <ion-row>
                           <ion-col size="12">
-                            <ion-button
-                              shape="round"
-                              disabled="true"
-                              class="ion-padding"
-                            >
+                            <ion-button shape="round" disabled="true" class="ion-padding">
                               Conductor
                             </ion-button>
-                            <ion-button
-                              class="ion-padding"
-                              color="tertiary"
-                              [disabled]="!activeSeat1"
-                              (click)="openSheet(1)"
-                            >
+                            <ion-button class="ion-padding" color="tertiary" [disabled]="!activeSeat1"
+                              (click)="openSheet(1)">
                               1
                             </ion-button>
                           </ion-col>
@@ -221,36 +178,22 @@
                       <div class="seatBtn">
                         <ion-row>
                           <ion-col size="12">
-                            <ion-button
-                              class="ion-padding"
-                              color="tertiary"
-                              [disabled]="!activeSeat2"
-                              (click)="openSheet(2)"
-                            >
+                            <ion-button class="ion-padding" color="tertiary" [disabled]="!activeSeat2"
+                              (click)="openSheet(2)">
                               2
                             </ion-button>
-                            <ion-button
-                              class="ion-padding"
-                              color="tertiary"
-                              [disabled]="!activeSeat3"
-                              (click)="openSheet(3)"
-                            >
+                            <ion-button class="ion-padding" color="tertiary" [disabled]="!activeSeat3"
+                              (click)="openSheet(3)">
                               3
                             </ion-button>
-                            <ion-button
-                              class="ion-padding"
-                              color="tertiary"
-                              [disabled]="!activeSeat4"
-                              (click)="openSheet(4)"
-                            >
+                            <ion-button class="ion-padding" color="tertiary" [disabled]="!activeSeat4"
+                              (click)="openSheet(4)">
                               4
                             </ion-button>
 
-                            <ion-action-sheet class="exitTrip"
-                              header="Seguro que quieres salir del viaje?"
-                              [buttons]="actionSheetBtns"
-                              (ionActionSheetDidDismiss)="sheetAction($event)"
-                            ></ion-action-sheet>
+                            <ion-action-sheet class="exitTrip" header="Seguro que quieres salir del viaje?"
+                              [buttons]="actionSheetBtns" (ionActionSheetDidDismiss)="sheetAction($event)">
+                            </ion-action-sheet>
 
                             <!-- Agregarle Funcion del Service -->
                           </ion-col>
@@ -279,36 +222,25 @@
     <!-- Agregar Consulta en RealTime -->
     <ion-content class="tripScroll">
       @for (viaje of viajes; track $index){
-      <ion-card
-        class="viajeCard"
-        [ngClass]="{'selectedCard':selectedTripId === $index}"
-      >
+      <ion-card class="viajeCard" [ngClass]="{'selectedCard':selectedTripId === $index}">
         <ion-row>
           <ion-col size="8">
             <h6 class="tripTitle">{{viaje.nombre}}</h6>
 
             <p class="txtWIcon">
-              <ion-img
-                class="txtIco initMarker"
-                src="assets/icons/geo.svg"
-              ></ion-img>
+              <ion-img class="txtIco initMarker" src="assets/icons/geo.svg"></ion-img>
               Desde: {{viaje.start.name}}
             </p>
 
             <p class="txtWIcon">
-              <ion-img
-                class="txtIco endMarker"
-                src="assets/icons/geo.svg"
-              ></ion-img>
+              <ion-img class="txtIco endMarker" src="assets/icons/geo.svg"></ion-img>
               Hasta: {{viaje.end.name}}
             </p>
           </ion-col>
           <ion-col size="4" class="ion-margin-top">
             <!-- Boton ViewRoute -->
-            <ion-button
-              color="tertiary"
-              (click)="viewRouteBtn(viaje.start.longitude, viaje.start.latitude, viaje.end.longitude, viaje.end.latitude, $index)"
-            >
+            <ion-button color="tertiary"
+              (click)="viewRouteBtn(viaje.start.longitude, viaje.start.latitude, viaje.end.longitude, viaje.end.latitude, $index)">
               <ion-icon src="assets/icons/search.svg"></ion-icon>
             </ion-button>
 
@@ -360,19 +292,11 @@
                   <div class="seatBtn">
                     <ion-row>
                       <ion-col size="12">
-                        <ion-button
-                          shape="round"
-                          disabled="true"
-                          class="ion-padding"
-                        >
+                        <ion-button shape="round" disabled="true" class="ion-padding">
                           Conductor
                         </ion-button>
-                        <ion-button
-                          class="ion-padding"
-                          color="tertiary"
-                          (click)="joinToTrip(viaje.id,1,user!.id)"
-                          [disabled]="viaje.seat1"
-                        >
+                        <ion-button class="ion-padding" color="tertiary" (click)="joinToTrip(viaje.id,1,user!.id)"
+                          [disabled]="viaje.seat1">
                           1
                         </ion-button>
                       </ion-col>
@@ -381,28 +305,16 @@
                   <div class="seatBtn">
                     <ion-row>
                       <ion-col size="12">
-                        <ion-button
-                          class="ion-padding"
-                          color="tertiary"
-                          (click)="joinToTrip(viaje.id,2,user!.id)"
-                          [disabled]="viaje.seat2"
-                        >
+                        <ion-button class="ion-padding" color="tertiary" (click)="joinToTrip(viaje.id,2,user!.id)"
+                          [disabled]="viaje.seat2">
                           2
                         </ion-button>
-                        <ion-button
-                          class="ion-padding"
-                          color="tertiary"
-                          (click)="joinToTrip(viaje.id,3,user!.id)"
-                          [disabled]="viaje.seat3"
-                        >
+                        <ion-button class="ion-padding" color="tertiary" (click)="joinToTrip(viaje.id,3,user!.id)"
+                          [disabled]="viaje.seat3">
                           3
                         </ion-button>
-                        <ion-button
-                          class="ion-padding"
-                          color="tertiary"
-                          (click)="joinToTrip(viaje.id,4,user!.id)"
-                          [disabled]="viaje.seat4"
-                        >
+                        <ion-button class="ion-padding" color="tertiary" (click)="joinToTrip(viaje.id,4,user!.id)"
+                          [disabled]="viaje.seat4">
                           4
                         </ion-button>
                       </ion-col>
@@ -420,35 +332,51 @@
     } }@else if(this.user?.usrType === 'driver'){
 
     <!-- Vista Conductor -->
+    <!-- Conductor deberia poder ver info del Pasajero -->
     <ion-content>
       @if(activeTripFound) {
+        @if (isMeetPoint) {
+
+        <ion-card style="color: white;">
+          
+          <ion-row>
+            <ion-col size="10">
+              <p>
+                - Viendo Punto de Encuentro del Asiento {{isViewingSeat}} -
+              </p>
+              <p>
+                Nombre del Pasajero: {{isViewingPsg}}
+              </p>
+            </ion-col>
+            <ion-col size="2">
+              <ion-button (click)="closeMeetInfo()" fill="clear" shape="round" class="closeMeetInfo">
+                <h6>
+                  X
+                </h6>
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-card>
+        }
       <ion-card class="viajeCard">
         <ion-row>
           <ion-col size="8">
             <h6 class="tripTitle">{{viajeActivo.nombre}}</h6>
 
             <p class="txtWIcon">
-              <ion-img
-                class="txtIco initMarker"
-                src="assets/icons/geo.svg"
-              ></ion-img>
+              <ion-img class="txtIco initMarker" src="assets/icons/geo.svg"></ion-img>
               Desde: {{viajeActivo.start.name}}
             </p>
 
             <p class="txtWIcon">
-              <ion-img
-                class="txtIco endMarker"
-                src="assets/icons/geo.svg"
-              ></ion-img>
+              <ion-img class="txtIco endMarker" src="assets/icons/geo.svg"></ion-img>
               Hasta: {{viajeActivo.end.name}}
             </p>
           </ion-col>
           <ion-col size="4" class="ion-margin-top">
             <!-- Boton ViewRoute -->
-            <ion-button
-              color="tertiary"
-              (click)="viewRouteBtn(viajeActivo.start.longitude, viajeActivo.start.latitude, viajeActivo.end.longitude, viajeActivo.end.latitude, viajeActivo.id)"
-            >
+            <ion-button color="tertiary"
+              (click)="viewRouteBtn(viajeActivo.start.longitude, viajeActivo.start.latitude, viajeActivo.end.longitude, viajeActivo.end.latitude, viajeActivo.id)">
               <ion-icon src="assets/icons/search.svg"></ion-icon>
             </ion-button>
 
@@ -517,19 +445,11 @@
                   <div class="seatBtn">
                     <ion-row>
                       <ion-col size="12">
-                        <ion-button
-                          shape="round"
-                          disabled="true"
-                          class="ion-padding"
-                        >
+                        <ion-button shape="round" disabled="true" class="ion-padding">
                           Conductor
                         </ion-button>
-                        <ion-button
-                          class="ion-padding"
-                          color="tertiary"
-                          (click)="getSeatLocation(viajeActivo.id,1)"
-                          [disabled]="!viajeActivo.seat1Loc"
-                        >
+                        <ion-button class="ion-padding" color="tertiary" (click)="getSeatLocation(viajeActivo.id,1)"
+                          [disabled]="!viajeActivo.seat1Loc">
                           1
                         </ion-button>
                       </ion-col>
@@ -538,33 +458,27 @@
                   <div class="seatBtn">
                     <ion-row>
                       <ion-col size="12">
-                        <ion-button
-                          class="ion-padding"
-                          color="tertiary"
-                          (click)="getSeatLocation(viajeActivo.id,2)"
-                          [disabled]="!viajeActivo.seat2Loc"
-                        >
+                        <ion-button class="ion-padding" color="tertiary" (click)="getSeatLocation(viajeActivo.id,2)"
+                          [disabled]="!viajeActivo.seat2Loc">
                           2
                         </ion-button>
-                        <ion-button
-                          class="ion-padding"
-                          color="tertiary"
-                          (click)="getSeatLocation(viajeActivo.id,3)"
-                          [disabled]="!viajeActivo.seat3Loc"
-                        >
+                        <ion-button class="ion-padding" color="tertiary" (click)="getSeatLocation(viajeActivo.id,3)"
+                          [disabled]="!viajeActivo.seat3Loc">
                           3
                         </ion-button>
-                        <ion-button
-                          class="ion-padding"
-                          color="tertiary"
-                          (click)="getSeatLocation(viajeActivo.id,4)"
-                          [disabled]="!viajeActivo.seat4Loc"
-                        >
+                        <ion-button class="ion-padding" color="tertiary" (click)="getSeatLocation(viajeActivo.id,4)"
+                          [disabled]="!viajeActivo.seat4Loc">
                           4
                         </ion-button>
                       </ion-col>
                     </ion-row>
                   </div>
+                  <ion-button (click)="openCompleteTripSheet()" color="success" shape="round" class="ion-padding">
+                    Completar Viaje
+                  </ion-button>
+                  <ion-action-sheet class="completeTripSheet" header="Deseas completar el viaje?"
+                    [buttons]="completeTripSheetBtns" (ionActionSheetDidDismiss)="sheetCompleteAction($event)">
+                  </ion-action-sheet>
                 </div>
               </div>
             </ion-content>
@@ -580,12 +494,7 @@
 
     }
 
-    <ion-toast
-      [isOpen]="isToastOpen"
-      [message]="msg"
-      [duration]="4000"
-      style="bottom: 50px"
-    >
+    <ion-toast [isOpen]="isToastOpen" [message]="msg" [duration]="4000" style="bottom: 50px">
     </ion-toast>
   </ion-card>
 </div>

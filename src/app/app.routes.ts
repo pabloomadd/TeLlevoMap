@@ -37,11 +37,5 @@ export const routes: Routes = [
       import('./pages/perfil/perfil.page').then((m) => m.PerfilPage),
     canActivate: [authGuard],
   },
-  {
-    path: 'config',
-    loadComponent: () =>
-      import('./pages/config/config.page').then((m) => m.ConfigPage),
-    canActivate: [authGuard],
-  },
   { path: '**', redirectTo: 'mapview', pathMatch: 'full' },
 ];
