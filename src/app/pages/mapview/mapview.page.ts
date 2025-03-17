@@ -71,7 +71,7 @@ import { GlobalService } from 'src/app/services/global.service';
     IonActionSheet,
     IonToast,
   ],
-  providers: [{ provide: MAPBOX_API_KEY, useValue: '' }],
+  providers: [{ provide: MAPBOX_API_KEY, useValue: environment.map }],
 })
 export class MapviewPage implements OnInit {
   @ViewChild('map') mapRef: any;
@@ -93,7 +93,8 @@ export class MapviewPage implements OnInit {
   viajes: IViaje[] = [];
 
   // Location Vars
-  centro!: LngLatLike;
+  // Centrado en Viña por Defecto
+  centro: LngLatLike = { lat: -33.01922840981443, lon: -71.56099705548111 }; 
   gps!: LngLatLike;
   inicio!: LngLatLike;
   destino!: LngLatLike;
@@ -227,6 +228,8 @@ export class MapviewPage implements OnInit {
     }
     return;
   }
+
+  // Centrar mapa por defecto en Viña del Mar en caso de no tener GPS
 
   async getGPS() {
     try {

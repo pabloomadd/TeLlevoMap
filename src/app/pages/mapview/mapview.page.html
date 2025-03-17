@@ -1,5 +1,5 @@
 <div class="map-container">
-  <mgl-map [style]="'mapbox://styles/mapbox/streets-v12'" [zoom]="[15.5]" [center]="centro" [pitch]="[45]"
+  <mgl-map [style]="'mapbox://styles/mapbox/streets-v12'" [zoom]="[13]" [center]="centro" [pitch]="[45]"
     [bearing]="[-17.6]" (mapLoad)="onLoad($event.target)" (mapClick)="onMapClick($event)">
     <mgl-layer id="3d-buildings" source="composite" sourceLayer="building" [filter]="['==', 'extrude', 'true']"
       type="fill-extrusion" [minzoom]="15" [paint]="{
